@@ -1,0 +1,87 @@
+#user-section{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5rem;
+    color: var(--font-dark);
+
+    padding: 0px 4px 4px 4px;
+}
+
+#user-section > div {
+    display: flex;
+    align-items: center;
+}
+
+#user-section h3{
+    font-weight: 300;
+}
+
+.user-opt-select{
+    cursor: pointer;
+}
+
+.user-opt-selected{
+    text-decoration: underline;
+    font-weight: 400;
+}
+
+.user-name-button{
+    content: "";
+    cursor: pointer;
+    margin-left: 0.5rem;
+    height: 1.7rem;
+    aspect-ratio: 1/1;
+    background-color: var(--font-dark);
+}
+
+.user-name-button:hover{
+    background-color: var(--button-hover);
+}
+
+.user-name-edit{
+    -webkit-mask: url('/assets/edit.svg') no-repeat center / contain;
+    mask: url('/assets/edit.svg') no-repeat center / contain;
+}
+.user-name-ok{
+    -webkit-mask: url('/assets/check.svg') no-repeat center / contain;
+    mask: url('/assets/check.svg') no-repeat center / contain;
+}
+.user-name-cancel{
+    -webkit-mask: url('/assets/x.svg') no-repeat center / contain;
+    mask: url('/assets/x.svg') no-repeat center / contain;
+}
+.mobile-displayed{
+    display: none;
+}
+
+@media screen and (max-width: 650px) {
+    #user-section{
+        padding: 0px 4px 8px 4px;
+    }
+    #newsletter-select{
+        margin-left: 1.5rem;
+    }
+    #newsletter-select h3{
+        width: fit-content;
+    }
+    #newsletter-select h3::first-letter{
+        text-transform: uppercase;
+    }
+    .mobile-hidden{
+        display: none;
+    }
+    .mobile-displayed{
+        display: block;
+    }
+
+    .user-name-ok{
+        display: none;
+        -webkit-mask: url('/assets/check.svg') no-repeat center / contain;
+        mask: url('/assets/check.svg') no-repeat center / contain;
+    }
+
+    #display-name-input{
+        width: 100%;
+    }
+}

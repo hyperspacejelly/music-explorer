@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;1,500&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Kanit', sans-serif;
+}
+
+:root {
+    scrollbar-width: thin;
+    -webkit-scrollbar-with:thin;
+    font-size: 10px;
+
+    --main-bg-gradient: linear-gradient(40deg, rgba(168, 164, 195, 1) 0%, rgba(246, 240, 226, 1) 100%);
+    --second-bg-gradient: linear-gradient(50deg, rgb(110, 105, 145, 1) 0%, rgba(168, 164, 195, 1) 100%);
+    --button-default:rgba(168, 164, 195, 1);
+    --button-hover:rgb(110, 105, 145, 1);
+    --navbar-bg:rgb(255, 255, 255, 0.9);
+    --navbar-bg-solid:rgb(255, 255, 255, 1);
+    --navbar-bg-dark:rgba(230, 230, 230, 0.9);
+
+    --font-dark: rgb(42, 42, 42);
+}
+
+html{
+    overscroll-behavior: none;
+}
+body{
+    overscroll-behavior: none;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background: var(--main-bg-gradient);
+}
+
+h2,
+h3 {
+    font-weight: 400;
+}
+
+main {
+    
+    height: 100vh;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    position: relative;
+    scrollbar-width: thin;
+    -webkit-scrollbar-with:thin;
+    position: relative;
+    padding: 2vh 4vw;
+    padding-bottom: calc(4vw + (100vh - 100svh));
+}
+
+input {
+    font-weight: 200;
+    border-style: solid;
+    color: rgb(91, 91, 91);
+    border: 1px solid var(--button-default);
+    padding: 0px 0.5rem;
+}
+input:hover{
+    border-color: var(--button-hover);
+}
+input:focus{
+    color: rgb(42, 42, 42);
+    border-color: var(--button-hover);
+    outline: none;
+}
+input::placeholder{
+    color: rgb(42, 42, 42);
+    font-weight: 300;
+}
+
+/* thin scrollbar on chrome etc.*/
+::-webkit-scrollbar {
+    width: 9px;
+  }
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.5);
+    border: transparent;
+}
+
+/* remove arrows on number input */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+@media screen and (-webkit-device-pixel-ratio: 2) {
+    :root {
+        font-size: 8px;
+    }
+}
+
+@media screen and (-webkit-device-pixel-ratio: 1.5) {
+    :root {
+        font-size: 9px;
+    }
+}
+
+@media screen and (-webkit-device-pixel-ratio: 1.25) {
+    :root {
+        font-size: 9px;
+    }
+}

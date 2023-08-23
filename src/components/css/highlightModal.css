@@ -1,0 +1,337 @@
+#highlight-cont{    
+    width: 100svw;
+    height: 100vh;
+    
+    position: fixed;
+    top:0;
+    left:0;
+
+    background-color: rgb(0, 0, 0, 0.8);
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 2000;
+}
+
+#highlight-cont.hidden{
+    display: none;
+}
+#highlight-cont.visible{
+    display: flex;
+}
+
+#highlight-modal{
+    display: flex;
+    justify-content: space-between;
+
+    height: 62%;
+    width: fit-content;
+    /* background-color: ghostwhite; */
+}
+
+/* ALBUM COVER */
+#highlight-modal figure{
+    height: 100%;
+
+    width: auto;
+}
+#highlight-modal figure img{
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+}
+
+/* Global style for text section */
+#highlight-modal .hl-text-section{
+    max-width: 30vw;
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1vw 2vw 1vw 2vw;
+
+    background-color: rgb(0, 0, 0, 0.8);
+    color: whitesmoke;
+}
+
+/* Album Name */
+.hl-album{
+    display: flex;
+    justify-content: space-between;
+    align-items:flex-start;
+    column-gap: 1rem;
+}
+
+.hl-album h2{
+    word-break: break-word;
+    max-width: calc(100% - 5rem);
+    font-size: clamp(3.2rem, 2vw, 4rem);
+    line-height: clamp(3.5rem, 2.3vw, 4.5rem);
+}
+.hl-album span{
+    word-break: keep-all;
+    font-weight: 200;
+}
+
+.hl-btn{
+    content: "";
+    cursor: pointer;
+    display: block;
+    margin-top: 2px;
+    width: clamp(3.2rem, 2vw, 4rem);
+
+    aspect-ratio: 1/1;
+
+    background-color: plum;
+}
+
+.hl-btn:hover{
+    background-color: mediumslateblue;
+}
+
+.hl-liked{
+    -webkit-mask: url('/assets/heart-fill.svg') no-repeat center / contain;
+    mask: url('/assets/heart-fill.svg') no-repeat center / contain;
+}
+
+
+.hl-like-default{
+    -webkit-mask: url('/assets/heart.svg') no-repeat center / contain;
+    mask: url('/assets/heart.svg') no-repeat center / contain;
+}
+
+/* artist Name */
+.hl-artist{
+    font-size: clamp(2.3rem, 1.6vw, 3rem);
+    line-height: clamp(4rem, 2.5vw, 5rem);
+
+    font-weight: 200;
+    margin: 0.5rem 0px;
+}
+.hl-link-cont{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.hl-link{
+    color: plum;
+    font-size: clamp(1.7rem, 1.2vw , 2.2rem);
+    text-decoration: none;
+}
+.hl-link::after{
+    content: "";
+    position: relative;
+    display: inline-block;
+    height: clamp(2rem, 1.3vw, 2.5rem);
+    margin-left:0.8rem;
+    top: 0.4rem;
+    width: auto;
+    aspect-ratio: 1/1;
+
+    background-color: plum;
+}
+.hl-link:hover{
+    color: MediumSlateBlue;
+}
+.hl-link:hover::after{
+    background-color: mediumslateblue;
+}
+
+.hl-download::after{
+    -webkit-mask:  url('/assets/download.svg') no-repeat center / contain;
+    mask: url('/assets/download.svg') no-repeat center / contain;
+}
+
+.hl-youtube::after{
+    -webkit-mask:  url('/assets/youtube.svg') no-repeat center / contain;
+    mask: url('/assets/youtube.svg') no-repeat center / contain;
+}
+.hl-separator{
+    display: inline-block;
+    width: 0.3rem;
+    height: 75%;
+
+    background-color: plum;
+
+    margin: 0px 1.7rem;
+}
+
+
+.hl-tracklist-title{
+    font-size: clamp(1.6rem, 1.2vw , 2.1rem);
+    margin: 1rem 0px;
+}
+
+.hl-tracklist-title span,
+.hl-tracklist-title a{
+    font-weight: 300;
+    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 0.8vw ,1.5rem);
+    text-decoration: none;
+    /* margin-top: 1.5rem; */
+}
+.hl-tracklist-title a{
+    margin: 0px 0.2rem;
+    color: plum;
+}
+.hl-tracklist-title a:hover{
+    color: mediumslateblue;
+}
+
+.hl-discogs-info{
+    display: block;
+    width:100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.hl-discogs-info ol{
+    list-style: decimal;
+    list-style-position: inside;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    /* column-gap: 1rem; */
+
+    height: 100%;
+    min-height: 95%;
+    width: auto;
+    max-width: 100%;
+    
+    
+    
+    /* flex: 1 1 0; */
+    scrollbar-width: thin;
+    -webkit-scrollbar-width: thin;
+    overflow-y: auto;
+    overflow-x: auto; 
+}
+.hl-discogs-info ol li{
+    list-style-position: inside;
+    break-inside:avoid;  
+}
+
+.hl-discogs-info li,
+.hl-discogs-info a,
+.hl-discogs-info p{
+    font-size: 1.8rem;
+    font-size: clamp(1.4rem, 0.95vw, 1.8rem);
+    font-weight: 200;
+}
+.hl-discogs-info li span{
+    display: inline-block;
+    width: fit-content;
+}
+
+
+.hl-tags{
+    height: fit-content;
+    font-size: clamp(1.2rem, 0.8vw , 1.5rem);
+}
+
+@media screen and (max-width: 1150px) {
+    #highlight-modal{
+        position: relative;
+        min-width: 61.5svh;
+        max-width: 96vw;
+        overflow: hidden;
+    }
+
+    #highlight-modal .hl-image{
+        filter: blur(1px);
+        display: flex;
+        justify-content: center;
+        background-color: rgb(0, 0, 0, 0.4);
+        width: 100%;
+    }
+    #highlight-modal .hl-text-section{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+
+        /* padding: 2vw 4vw; */
+    }
+
+    .hl-album{
+        font-size: 3.4rem;
+        line-height:3.6rem;
+    }
+
+    .hl-btn:hover{
+        background-color: plum;
+    }
+    .hl-btn:active{
+        background-color: mediumslateblue;
+    }
+    
+    /* artist Name */
+    .hl-artist{
+        font-size: 2.4rem;
+        line-height: 4rem;
+    }
+    
+    .hl-link{
+        font-size: 1.8rem;
+    }
+
+    .hl-link::after{
+        height: 2rem;
+    }
+    
+    .hl-discogs-info ol{
+        max-height: 100%;
+    }
+
+    .hl-discogs-info ol li{
+        width: fit-content;
+        max-width: 100%;
+        list-style-position: inside;
+        break-inside:avoid;  
+    }
+
+    .hl-discogs-info li,
+    .hl-discogs-info a,
+    .hl-discogs-info p{
+        font-size: 1.6rem;
+        font-weight: 200;
+    }
+    
+}
+
+@media screen and (max-width: 620px) {
+    #highlight-modal{
+        position: relative;
+        min-width: 90vw;
+        height: 95vw;
+        max-width: 96vw;
+        overflow: hidden;
+    }
+
+    #highlight-modal .hl-text-section{
+        padding: 1rem 1.5rem;
+    }
+    .hl-discogs-info ol{
+        flex-wrap: wrap;
+        column-gap: 1rem;
+        
+        max-height: 95%;
+        min-height: 95%;
+        overflow: auto;
+    }
+    .hl-discogs-info ol li{
+        list-style-position: inside;
+        width: fit-content;
+        max-width: 100%;
+        break-inside:auto;  
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

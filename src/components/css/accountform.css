@@ -1,0 +1,45 @@
+#login-form.account-form {
+    flex-direction: row;
+    align-items: stretch;
+    column-gap: 2rem;
+    row-gap: 0rem;
+
+    height: fit-content;
+
+    margin: 0px 2rem;
+}
+
+#login-form.account-form div{
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+}
+
+#login-cont.account-form button{
+    font-size: 1.8rem;
+    background-color: rgb(0, 0, 0,0);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+
+    color: var(--button-hover);
+    border: 1px solid grey;
+    margin: 3rem 1rem 1rem 1rem;
+
+}
+
+.form-separator{
+    display: block;
+    width: 0.3rem;
+
+
+
+    background-image: var(--second-bg-gradient);
+    background-size: contain;
+
+    margin: 0px 1.7rem;
+    margin-top: 2rem;
+}
+
+#login-cont.account-form button:hover{
+    background-color: var(--navbar-bg-dark);
+}
