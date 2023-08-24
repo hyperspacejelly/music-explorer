@@ -23,7 +23,7 @@ This repository is for the UI part of a personal project of mine. The project is
 
 Music Explorer functions just as well on mobile as it does on desktop!
 
-| Standard age | Page with modal open|
+| Standard page | Page with modal open|
 |--------------|---------------------|
 |![Screenshot of music explorer on mobile](./readme_media/musexp-mobile.png)|![Screenshot of music explorer on mobile with a modal open](./readme_media/musexp-mobile3.png)|
 
