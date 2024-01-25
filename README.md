@@ -3,7 +3,7 @@
 This repository is for the UI part of a personal project of mine. The project is made of 3 parts : 
 - A database of music albums (with title, release year, artist name, tags, link to album cover).
 - A custom PHP api that lets me search through it, sort it, login to an account and bookmark albums.
-    (this includes a script that fetches the tracklist for a given album through the [Discogs](https://www.discogs.com/)) API.
+    (this includes a script that fetches the tracklist for a given album through the [Discogs](https://www.discogs.com/) API).
 - **A React/Typescript UI to display and interact with the data.**
 
 ![A screenshot of a random page with album covers](./readme_media/musexp1.png)
