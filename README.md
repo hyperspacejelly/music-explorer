@@ -3,7 +3,7 @@
 This repository is for the UI part of a personal project of mine. The project is made of 3 parts : 
 - A database of music albums (with title, release year, artist name, tags, link to album cover).
 - A custom PHP api that lets me search through it, sort it, login to an account and bookmark albums.
-    (this includes a script that fetches the track list for the album by scraping [Discogs](https://www.discogs.com/)).
+    (this includes a script that fetches the tracklist for a given album through the [Discogs](https://www.discogs.com/)) API.
 - **A React/Typescript UI to display and interact with the data.**
 
 ![A screenshot of a random page with album covers](./readme_media/musexp1.png)
@@ -30,7 +30,6 @@ Music Explorer functions just as well on mobile as it does on desktop!
 ## Dependencies and Credits
 
 - Music Explorer was built using Vite and uses "react-router-dom".
-- The tracklist fetching script uses [simpleHTMLdom](https://simplehtmldom.sourceforge.io/docs/1.9/index.html).
 - All icons are from [Feather Icons](https://feathericons.com/).
 
 
