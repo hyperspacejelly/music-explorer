@@ -23,8 +23,8 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
     },[albumInfo]);
 
     const ytQuery = () => {
-        const albumNameSplit = albumInfo.album.split(' ');
-        const artistNameSplit = albumInfo.artist.split(' ');
+        const albumNameSplit = albumInfo.album.replaceAll(/(&\S+;+)/g, " ").split(' ');
+        const artistNameSplit = albumInfo.artist.replaceAll(/(&\S+;+)/g, " ").split(' ');
 
         let query="";
 
@@ -37,6 +37,12 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
         });
 
         query+=`+${albumInfo.year}`;
+
+        console.log({
+            album: albumInfo.album,
+            artist: albumInfo.artist,
+            query: query
+        })
 
         return query;
     };
