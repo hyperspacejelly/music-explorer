@@ -51,7 +51,13 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
         if(open){
             const discogSearch = decodeHTML(albumInfo.album)+" "+decodeHTML(albumInfo.artist);
             getTracklist(discogSearch)
-            .then((info)=>setDiscogsInfo(info));
+            .then((info)=>{
+                if(info.status === 200){
+                    setDiscogsInfo(info);
+                } else{
+                    setDiscogsInfo({ ...info, tracklist : []});
+                }
+            });
             if(tracklistRef.current !== null){
                 tracklistRef.current.scrollTop = 0;
             }
@@ -70,7 +76,7 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
     }
 
     function renderTracklist(){
-        if(typeof discogsInfos === "undefined"){ return <></>}
+        if(typeof discogsInfos === "undefined"){return <></>}
 
         if(discogsInfos.tracklist.length === 0){return<p>Couldn't fetch tracklist</p>}
 
@@ -107,11 +113,11 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
                         Tracklist &nbsp; 
                         {discogsInfos && <span>
                             (
-                        <a href={discogsInfos.url === "https://www.discogs.com" ? 
+                        <a href={discogsInfos.url ?? 
                                 `https://www.discogs.com/search?q=${albumInfo.artist}&type=artist` 
-                                : discogsInfos.url} 
+                                } 
                             target="_blank">
-                                Discogs {discogsInfos.url === "https://www.discogs.com" ? "artist search results" : "page"}
+                                Discogs {discogsInfos.url ? "page" : "artist search results"}
                             </a>
                             )</span>
                         }  

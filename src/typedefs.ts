@@ -1,6 +1,8 @@
 export interface discogsInfo{
+    status: number,
     url :string,
-    tracklist :string[]
+    tracklist :string[],
+    query: string
 }
 
 export interface album {

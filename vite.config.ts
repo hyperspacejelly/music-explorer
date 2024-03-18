@@ -5,6 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    proxy:{
+      '/musex-api' : "http:/locahost",
+    },
     host: true
   }
 })
