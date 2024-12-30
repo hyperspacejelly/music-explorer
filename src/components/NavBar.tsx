@@ -44,8 +44,8 @@ function NavBar({uid, pageNumber, selectPage, setNewAlbumList }: NavBarProps) {
     }, [pageNumber, savedSearchInput, currSort, filterLikes]);
 
     useEffect(()=>{
-        getPageCount(savedSearchInput).then((res)=>setTotalPageCount(res));
-    }, [savedSearchInput]);
+        getPageCount(savedSearchInput, (filterLikes ? uid : undefined) ).then((res)=>setTotalPageCount(res));
+    }, [savedSearchInput, filterLikes]);
 
     function handleSearchInput() {
         setSaveSearchInput(searchInput)
