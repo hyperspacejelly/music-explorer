@@ -55,18 +55,20 @@ async function updateUserInfo(user :string, uid :string, newDisplayName :string,
 
 function UserSection({loginStatus} :UserSectionProps){
     const [newsletterStatus, setNewsletterStatus] = useState<boolean>();
-    const [displayName, setDisplayName]=useState(loginStatus.display_name);
+    const [displayName, setDisplayName]=useState(loginStatus.isGuest ? "Guest" : loginStatus.display_name);
     const [editMode, setEditMode] = useState(false);
     const [displayNameEdit, setDisplayNameEdit] = useState("");
     
     useEffect(()=>{
-        getUserInfo(loginStatus.email, loginStatus.uid)
-        .then((response)=>{
-            setNewsletterStatus(response.newsletter);
-            if(response.display_name!=displayName){
-                setDisplayName(response.display_name);
-            }
-        });
+        if(!loginStatus.isGuest){
+            getUserInfo(loginStatus.email, loginStatus.uid)
+            .then((response)=>{
+                setNewsletterStatus(response.newsletter);
+                if(response.display_name!=displayName){
+                    setDisplayName(response.display_name);
+                }
+            });
+        }
     },[]);
 
     function handleUpdateUserInfo(newsletter :boolean, newDisplayName? :string){
@@ -93,11 +95,11 @@ function UserSection({loginStatus} :UserSectionProps){
         <div>
             <h3 className="mobile-hidden">Hello,&nbsp;</h3>
             <h3 className="mobile-displayed">Hi,&nbsp;</h3>
-            {!editMode && <>
+            { (!editMode) && <>
                 <h3>{displayName}</h3>
-                <div className="user-name-button user-name-edit" onClick={()=>setEditMode(true)}></div>
+                { !loginStatus.isGuest && <div className="user-name-button user-name-edit" onClick={()=>setEditMode(true)}></div>}
                 </>}
-            {editMode && <>
+            {(editMode && !loginStatus.isGuest) && <>
                 <input id="display-name-input" 
                     type="text" placeholder={displayName} 
                     value={displayNameEdit} 
@@ -120,6 +122,7 @@ function UserSection({loginStatus} :UserSectionProps){
         </div>
         <div id="newsletter-select">
             <h3>
+                {!loginStatus.isGuest && <>
                 <span className="mobile-hidden">Receive&nbsp;</span>newsletter?&nbsp; 
                 <span className={"user-opt-select "+ (newsletterStatus? "user-opt-selected":"none")}
                     onClick={()=>{
@@ -134,6 +137,8 @@ function UserSection({loginStatus} :UserSectionProps){
                         handleUpdateUserInfo(false);
                     }}>
                         No</span>
+                </>}
+                {loginStatus.isGuest && <>Newsletter unavailable in guest mode</>}
             </h3>
         </div>
     </div>);

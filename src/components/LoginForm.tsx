@@ -15,6 +15,17 @@ function LoginForm({setLoginStatus} :LoginFormProps){
     const userRef = useRef<HTMLInputElement>(null);
     const pwdRef = useRef<HTMLInputElement>(null);
 
+    function handleGuestLogin(){
+        const guestLoginStatus :loginStatus = {
+                isLoggedIn : true,
+                isGuest: true,
+                email: "",
+                display_name: "",
+                uid: ""
+            }
+        setLoginStatus(guestLoginStatus);
+    }
+
     function handleSubmit(){
         if(userRef.current === null || pwdRef.current === null) return;
 
@@ -29,6 +40,7 @@ function LoginForm({setLoginStatus} :LoginFormProps){
             if(response.status === 200){
                 const loginStatus :loginStatus = {
                     isLoggedIn : true,
+                    isGuest: false,
                     email: response.email,
                     display_name: response.display_name,
                     uid: response.uid
@@ -80,7 +92,10 @@ function LoginForm({setLoginStatus} :LoginFormProps){
                                 }
                             })}/>
                     </section>
-                    <button type="submit" onClick={handleSubmit}>Login</button>
+                    <section className="login-btns">
+                        <button type="submit" onClick={handleSubmit}>Login</button>
+                        <button onClick={handleGuestLogin}>Guest</button>
+                    </section>
                 </form>
             </div>
         </div>

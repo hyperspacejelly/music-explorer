@@ -144,6 +144,24 @@
     mask: url('/assets/download.svg') no-repeat center / contain;
 }
 
+.hl-download.disabled{
+    text-decoration-style: solid;
+    text-decoration-thickness: 2px;
+    text-decoration-line: line-through;
+}
+
+.hl-download.disabled{
+    filter: grayscale(100%);
+}
+
+.hl-download.disabled:hover{
+    color: plum;
+}
+
+.hl-download.disabled:hover::after{
+    background-color: plum;
+}
+
 .hl-youtube::after{
     -webkit-mask:  url('/assets/youtube.svg') no-repeat center / contain;
     mask: url('/assets/youtube.svg') no-repeat center / contain;

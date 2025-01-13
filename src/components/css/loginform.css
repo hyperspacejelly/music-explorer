@@ -68,6 +68,11 @@
     opacity: 0.6;
 }
 
+#login-form .login-btns{
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
 #login-form button{
     font-size: 1.8rem;
     background-color: rgb(0, 0, 0,0);

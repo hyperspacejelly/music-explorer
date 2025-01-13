@@ -14,7 +14,7 @@ export interface album {
     tags :string,
     download :string,
     date_added :string,
-    liked :boolean
+    liked :boolean | undefined
 }
 
 export interface loginResponse {
@@ -28,6 +28,7 @@ export type FullAlbumInfo = discogsInfo & album;
 
 export type loginStatus = {
     isLoggedIn :boolean,
+    isGuest: boolean,
     email :string,
     display_name: string,
     uid :string
