@@ -5,6 +5,7 @@ import { getAlbumPage } from '../func/getAlbumPage';
 import { album } from '../typedefs';
 
 import './css/navbar.css';
+import { getPageCount } from '../func/getPageCount';
 
 type NavBarProps = {
     uid :string,
@@ -23,6 +24,8 @@ function resetScroll() {
 }
 
 function NavBar({uid, pageNumber, selectPage, setNewAlbumList }: NavBarProps) {
+    const [totalPageCount, setTotalPageCount] = useState(null);
+
     const [searchInput, setSearchInput] = useState("");
     const [filterLikes, setFilterLikes] = useState(false)
     const [savedSearchInput, setSaveSearchInput] = useState("");
@@ -39,6 +42,10 @@ function NavBar({uid, pageNumber, selectPage, setNewAlbumList }: NavBarProps) {
         if(toggleMobile){setToggleMobile(false);}
 
     }, [pageNumber, savedSearchInput, currSort, filterLikes]);
+
+    useEffect(()=>{
+        getPageCount(savedSearchInput, (filterLikes ? uid : undefined) ).then((res)=>setTotalPageCount(res));
+    }, [savedSearchInput, filterLikes]);
 
     function handleSearchInput() {
         setSaveSearchInput(searchInput)
@@ -103,6 +110,7 @@ function NavBar({uid, pageNumber, selectPage, setNewAlbumList }: NavBarProps) {
                         placeholder={`${pageNumber}`}
                         value={pageNumInput} onChange={(e) => setPageNumInput(e.target.value)}
                         onKeyDown={handleEnterKeyPageNum}></input>
+                        &nbsp;/{totalPageCount ?? 0}
                 </h2>
                 <div className='nav-button nav-next' onClick={() => {
                     setPageNumInput("");
