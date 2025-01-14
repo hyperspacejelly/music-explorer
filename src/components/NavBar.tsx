@@ -34,6 +34,8 @@ function NavBar({uid, pageNumber, selectPage, setNewAlbumList }: NavBarProps) {
     const [pageNumInput, setPageNumInput] = useState<string>();
     const [toggleMobile, setToggleMobile] = useState(false);
 
+    const [sortCategory, setSortCategory] = useState("");
+
     useEffect(() => {
         getAlbumPage(pageNumber, currSort.isAsc, uid, filterLikes, savedSearchInput, currSort.sortColumn)
             .then((value) => setNewAlbumList(value));
@@ -143,12 +145,21 @@ function NavBar({uid, pageNumber, selectPage, setNewAlbumList }: NavBarProps) {
                     onClick={handleReset}></div>
             </section>
             <section id='nav-sort-section'>
-                <h2 className="nav-header">Sort By</h2>
+                <h2 className="nav-header">
+                    <span>Sort By&nbsp;</span>
+                    <span className={'nav-sort-cat'+(sortCategory!==""?" sort-cat-open":"")}>{sortCategory}</span>
+                </h2>
                 <select value={sortInput} 
                         onChange={(e) => 
                             {
                                 handleSort(e.target.value);
                                 setSortInput(e.target.value);
+                                if(e.target.value.split("+").length > 1){ 
+                                   setSortCategory(e.target.value.split("+")[0]);
+                                } else {
+                                   setSortCategory("");
+                                }
+                                
                             }}>
                     <option value="">Latest added</option>
                     { (uid!=="") &&<option value="likes">Liked albums 💜</option>}
