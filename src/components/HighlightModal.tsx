@@ -38,12 +38,6 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
 
         query+=`+${albumInfo.year}`;
 
-        console.log({
-            album: albumInfo.album,
-            artist: albumInfo.artist,
-            query: query
-        })
-
         return query;
     };
     
