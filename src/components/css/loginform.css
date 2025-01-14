@@ -70,7 +70,12 @@
 
 #login-form .login-btns{
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
+}
+
+#login-form .login-btns button{
+    margin-left: 0;
+    margin-right: 0;
 }
 
 #login-form button{

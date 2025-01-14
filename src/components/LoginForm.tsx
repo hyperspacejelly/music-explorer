@@ -93,8 +93,8 @@ function LoginForm({setLoginStatus} :LoginFormProps){
                             })}/>
                     </section>
                     <section className="login-btns">
+                        <button onClick={handleGuestLogin}>Browse as guest</button>
                         <button type="submit" onClick={handleSubmit}>Login</button>
-                        <button onClick={handleGuestLogin}>Guest</button>
                     </section>
                 </form>
             </div>
