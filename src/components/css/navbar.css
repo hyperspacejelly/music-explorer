@@ -126,6 +126,12 @@ input.nav-numInput[type=number] {
     mask: url('/assets/x-octagon.svg') no-repeat center / cover;
 }
 
+.nav-sort-cat{
+    text-transform: capitalize;
+    text-decoration: underline;
+}
+
+
 @media screen and (max-width: 900px) {
     #navbar {
         grid-template-columns: 3fr 2fr 1fr;
