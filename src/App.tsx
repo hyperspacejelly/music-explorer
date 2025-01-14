@@ -13,6 +13,7 @@ import { album, loginStatus } from './typedefs';
 function App() {
   const [loginStatus, setLoginStatus] = useState<loginStatus>({
     isLoggedIn: false,
+    isGuest: true,
     email : "",
     display_name: "",
     uid : ""
@@ -82,6 +83,7 @@ function App() {
 
         {currentAlbumList && 
           <AlbumTable albumList={currentAlbumList} 
+                  isGuest={loginStatus.isGuest}
                   setSelectedAlbum={setFullDisplayedAlbum}/>}
       </>}
     </>

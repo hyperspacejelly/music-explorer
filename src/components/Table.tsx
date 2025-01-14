@@ -6,10 +6,11 @@ import './css/table.css';
 
 type AlbumTableProps ={
     albumList: album[],
+    isGuest: boolean,
     setSelectedAlbum: (albumInfo : album)=>void
 }
 
-function AlbumTable({albumList, setSelectedAlbum} :AlbumTableProps){
+function AlbumTable({albumList, isGuest, setSelectedAlbum} :AlbumTableProps){
 
     const albumRender = albumList.map((album)=>{
         return(
@@ -17,7 +18,7 @@ function AlbumTable({albumList, setSelectedAlbum} :AlbumTableProps){
                 onClick={()=>setSelectedAlbum(album)}>
                 <span>{album.tags}</span>
                 <img src={album.img_src} alt={album.album} 
-                    className={album.liked ? "album-like" : ""}/>
+                    className={album.liked ? "album-like" : ""} />
                 <figcaption>
                     <h2>{decodeHTML(album.album.replace("\\",""))}</h2>
                     <h3>{decodeHTML(album.artist.replace("\\",""))}</h3>

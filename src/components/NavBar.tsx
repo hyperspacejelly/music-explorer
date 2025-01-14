@@ -151,7 +151,7 @@ function NavBar({uid, pageNumber, selectPage, setNewAlbumList }: NavBarProps) {
                                 setSortInput(e.target.value);
                             }}>
                     <option value="">Latest added</option>
-                    <option value="likes">Liked albums 💜</option>
+                    { (uid!=="") &&<option value="likes">Liked albums 💜</option>}
                     <optgroup label='Release year'>
                         <option className='nav-asc' value="year+asc">Ascending</option>
                         <option className='nav-desc' value="year+desc">Descending</option>

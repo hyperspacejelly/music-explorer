@@ -48,7 +48,7 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
     };
     
     useEffect(()=>{
-        if(open){
+        if(open && uid!==""){
             const discogSearch = decodeHTML(albumInfo.album)+" "+decodeHTML(albumInfo.artist);
             getTracklist(discogSearch)
             .then((info)=>{
@@ -99,7 +99,8 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
                     <h2>{decodeHTML(albumInfo.album.replace("\\",""))+" "} 
                         <span>({albumInfo.year})</span>
                     </h2> 
-                    <div className={"hl-btn "+(isLiked?"hl-liked":"hl-like-default")} onClick={handleLike}></div>
+                    {(uid !== "") &&
+                    <div className={"hl-btn "+(isLiked?"hl-liked":"hl-like-default")} onClick={handleLike}></div>}
                 </div>
                 <h3 className="hl-artist">{decodeHTML(albumInfo.artist.replace("\\",""))}</h3>
                 <section className="hl-link-cont">
@@ -107,7 +108,12 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
                         href={"https://www.youtube.com/results?search_query="+ytQuery()} 
                         target="_blank">Find on YouTube</a>
                     <div className="hl-separator"></div>
-                    <a className="hl-link hl-download" href={albumInfo.download} target="_blank">Download</a>
+                    {uid!=="" &&
+                        <a className="hl-link hl-download" href={albumInfo.download} target="_blank">Download</a>
+                    }
+                    {uid=="" &&
+                        <a className="hl-link hl-download disabled" href="javascript:void(0)" >Download</a>
+                    }
                 </section>
                 <h3 className="hl-tracklist-title">
                         Tracklist &nbsp; 
@@ -127,9 +133,14 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
                         {discogsInfos && 
                             renderTracklist()
                         }
-                        {!discogsInfos &&
+                        {(!discogsInfos && uid!=="") &&
                             <p>
                                 Fetching Tracklist...
+                            </p>
+                        }
+                        {(!discogsInfos && uid=="") &&
+                            <p>
+                                Tracklist unavailable in guest mode.
                             </p>
                         }
                      </ol>
