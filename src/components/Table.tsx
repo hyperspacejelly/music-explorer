@@ -10,7 +10,7 @@ type AlbumTableProps ={
     setSelectedAlbum: (albumInfo : album)=>void
 }
 
-function AlbumTable({albumList, isGuest, setSelectedAlbum} :AlbumTableProps){
+function AlbumTable({albumList, setSelectedAlbum} :AlbumTableProps){
 
     const albumRender = albumList.map((album)=>{
         return(

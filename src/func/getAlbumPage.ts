@@ -13,12 +13,26 @@ export async function getAlbumPage(page:number, asc: boolean, uid :string, likes
   
     const response = await fetch(url);
   
-    const albums = await response.json();
+    const data = await response.json();
 
-    if(albums.status === 204){
+    if(data.status === 204){
         return undefined;
     }
   
-    return albums;
+    return data.albums;
+}
+
+type sortOrder = "asc" | "desc";
+
+export const getFetchAlbumParam = (page: number, sortOrder :sortOrder, uid :string, likes :boolean, sortCat :string, limit :number, search :string) => {
+    let queryPart = `?page=${page}&asc=`;
+    queryPart += sortOrder === "asc" ? 1 : 0;
+    queryPart += `&uid=${uid}&likes=${likes?1:0}`;
+    queryPart += limit === undefined ? '' : `&limit=${limit}`;
+    queryPart += search !== "" ? '' : `&search=${search}`;
+    queryPart += sortCat !== "" ? '': `&sort=${sortCat}`;
+    queryPart += '&t='+Date.now();
+
+    return queryPart;
 }
 

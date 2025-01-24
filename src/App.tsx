@@ -7,17 +7,16 @@ import NavBar from './components/NavBar';
 import LoginForm from './components/LoginForm';
 import UserSection from './components/UserSection';
 
+import { useAppSelector } from './app/hooks';
+import { selectUserInfo } from './app/features/user/userSlice';
+
 //Import Types
-import { album, loginStatus } from './typedefs';
+import { album } from './typedefs';
 
 function App() {
-  const [loginStatus, setLoginStatus] = useState<loginStatus>({
-    isLoggedIn: false,
-    isGuest: true,
-    email : "",
-    display_name: "",
-    uid : ""
-  });
+
+  const loginStatus = useAppSelector( selectUserInfo );
+
   const [pageNumber, setPageNumber] = useState(1);
   const [currentAlbumList, setCurrentAlbumList] = useState<album[]>();
   const [currSelectedAlbum, setCurrSelectedAlbum] = useState<album>();
@@ -60,17 +59,13 @@ function App() {
     setPageNumber(num);
   }
 
-  function updateLoginStatus(status :loginStatus){
-    setLoginStatus(status);
-  }
-
   function setNewAlbumList(list :album[] | undefined){
     setCurrentAlbumList(list);
   }
 
   return (
     <>
-      {!loginStatus.isLoggedIn && <LoginForm setLoginStatus={updateLoginStatus} />}
+      {!loginStatus.isLoggedIn && <LoginForm />}
       {loginStatus.isLoggedIn &&<>
         <UserSection loginStatus={loginStatus} />
 

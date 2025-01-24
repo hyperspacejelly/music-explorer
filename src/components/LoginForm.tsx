@@ -1,30 +1,29 @@
 import { loginStatus } from "../typedefs";
-import { useState, useRef } from "react";
-import { checkLogin } from "../func/checkLogin";
+import { useState, useRef, useEffect } from "react";
+// import { checkLogin } from "../func/checkLogin";
+
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { logAsGuest, checkLogin, selectStatus } from "../app/features/user/userSlice";
 
 import './css/loginform.css';
 
-type LoginFormProps = {
-    setLoginStatus :(login :loginStatus)=>void
-}
+function LoginForm(){
+    const dispatch = useAppDispatch();
 
-function LoginForm({setLoginStatus} :LoginFormProps){
+    const errorStatus = useAppSelector( selectStatus );
+
     const [userInput, setUserInput] = useState("");
     const [pwdInput, setPwdInput] = useState("");
 
     const userRef = useRef<HTMLInputElement>(null);
     const pwdRef = useRef<HTMLInputElement>(null);
 
-    function handleGuestLogin(){
-        const guestLoginStatus :loginStatus = {
-                isLoggedIn : true,
-                isGuest: true,
-                email: "",
-                display_name: "",
-                uid: ""
-            }
-        setLoginStatus(guestLoginStatus);
-    }
+    useEffect(()=>{
+        if(errorStatus !== undefined && errorStatus !== 200){
+            setUserInput("");
+            setPwdInput("");
+        }
+    }, [errorStatus]);
 
     function handleSubmit(){
         if(userRef.current === null || pwdRef.current === null) return;
@@ -36,36 +35,11 @@ function LoginForm({setLoginStatus} :LoginFormProps){
 
         if(userInput === "" || pwdInput ==="") return;
 
-        checkLogin(userInput, pwdInput).then((response)=>{
-            if(response.status === 200){
-                const loginStatus :loginStatus = {
-                    isLoggedIn : true,
-                    isGuest: false,
-                    email: response.email,
-                    display_name: response.display_name,
-                    uid: response.uid
-                }
-                
-                setLoginStatus(loginStatus);
-            }
-            if(response.status === 404){
-                if(userRef.current){
-                    setUserInput("");
-                    setPwdInput("");
-                    userRef.current.className="input-error";
-                    userRef.current.placeholder="User doesn't exist";
-                }
-            }
-            if(response.status === 500){
-                if(pwdRef.current){
-                    setPwdInput("");
-                    pwdRef.current.className="input-error";
-                    pwdRef.current.placeholder="Incorrect password";
-                }
-            }
-        });
-
-        
+        try{
+            dispatch( checkLogin({pwd:pwdInput, email:userInput})).unwrap();
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     return(
@@ -76,6 +50,8 @@ function LoginForm({setLoginStatus} :LoginFormProps){
                     <section>
                         <label htmlFor="login-user">E-mail</label>
                         <input type="email" id="login-user" 
+                            className = {errorStatus === 404 ? "input-error" : ""}
+                            placeholder = {errorStatus === 404 ? "User doesn't exist" : ""}
                             ref={userRef}
                             value={userInput}
                             onChange={(e)=>setUserInput(e.target.value)}/>
@@ -85,6 +61,8 @@ function LoginForm({setLoginStatus} :LoginFormProps){
                         <input type="password" id="login-pwd"
                             ref={pwdRef}
                             value={pwdInput}
+                            className = {errorStatus === 500 ? "input-error" : ""}
+                            placeholder = {errorStatus === 500 ? "Incorrect password" : ""}
                             onChange={(e)=>setPwdInput(e.target.value)}
                             onKeyDown={(e=>{
                                 if(e.key === "Enter"){
@@ -93,7 +71,7 @@ function LoginForm({setLoginStatus} :LoginFormProps){
                             })}/>
                     </section>
                     <section className="login-btns">
-                        <button onClick={handleGuestLogin}>Browse as guest</button>
+                        <button onClick={()=> dispatch( logAsGuest() )}>Browse as guest</button>
                         <button type="submit" onClick={handleSubmit}>Login</button>
                     </section>
                 </form>
