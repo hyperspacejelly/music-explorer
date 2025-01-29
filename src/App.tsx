@@ -7,20 +7,28 @@ import NavBar from './components/NavBar';
 import LoginForm from './components/LoginForm';
 import UserSection from './components/UserSection';
 
-import { useAppSelector } from './app/hooks';
+import { useAppSelector, useAppDispatch} from './app/hooks';
 import { selectUserInfo } from './app/features/user/userSlice';
+
+import { getPageCount, selectAllSearchParams } from './app/features/search/searchSlice';
 
 //Import Types
 import { album } from './typedefs';
+import { selectModalInfo } from './app/features/highlight/highlightSlice';
+import { fetchAlbumPage } from './app/features/albums/albumsSlice';
 
 function App() {
 
+  // State pulled from Redux Store
   const loginStatus = useAppSelector( selectUserInfo );
+  const highlightOpen = useAppSelector((state) => state.highlight.modalOpen);
+  const searchParams = useAppSelector( selectAllSearchParams );
+
+  const dispatch = useAppDispatch();
 
   const [pageNumber, setPageNumber] = useState(1);
   const [currentAlbumList, setCurrentAlbumList] = useState<album[]>();
-  const [currSelectedAlbum, setCurrSelectedAlbum] = useState<album>();
-  const [highlightOpen, setHighlightOpen] = useState(false);
+  const currSelectedAlbum = useAppSelector(selectModalInfo);
 
   // Prevents background scrolling when modal open
   useEffect(()=>{
@@ -34,10 +42,20 @@ function App() {
     }
   },[highlightOpen]);
 
-  function setFullDisplayedAlbum(albumInfo : album){ 
-      setCurrSelectedAlbum(albumInfo);
-      setHighlightOpen(true);
-  }
+  // Gets page count whenever a parameter affecting it changes
+  useEffect(()=>{
+    dispatch( getPageCount() );
+  },[searchParams.filter, searchParams.category, searchParams.liked, searchParams.totalResults]);
+
+  // init fetch
+  useEffect(()=>{
+    dispatch( fetchAlbumPage() );
+  }, []);
+
+  // get album list when change in search params 
+  useEffect(()=>{
+    dispatch( fetchAlbumPage() );
+  }, [searchParams]);
 
   function setPageNumberWrapper(num :number){
     
@@ -67,19 +85,11 @@ function App() {
     <>
       {!loginStatus.isLoggedIn && <LoginForm />}
       {loginStatus.isLoggedIn &&<>
-        <UserSection loginStatus={loginStatus} />
-
-        <NavBar uid={loginStatus.uid} pageNumber={pageNumber} selectPage={setPageNumberWrapper} 
-                 setNewAlbumList={setNewAlbumList}/>
-      
+        <UserSection/>
+        <NavBar/>
         {currSelectedAlbum && 
-          <HighlightModal uid={loginStatus.uid} albumInfo={currSelectedAlbum} 
-                  open={highlightOpen} toggleModalOff={()=>{setHighlightOpen(false)}}/>}
-
-        {currentAlbumList && 
-          <AlbumTable albumList={currentAlbumList} 
-                  isGuest={loginStatus.isGuest}
-                  setSelectedAlbum={setFullDisplayedAlbum}/>}
+          <HighlightModal/>}
+        <AlbumTable />
       </>}
     </>
   );

@@ -2,69 +2,58 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../../store";
 import type { album } from "../../../typedefs";
 
+import type { SearchParams } from "../search/searchSlice";
+
 import { get_albums as getAlbumURL } from "../../../API_ENDPOINT";
 
-type albumSliceState = {
-    albumList :album[] | undefined,
-    totalResults: number,
-    sort : {
-        liked: boolean,
-        category :string,
-        order: "asc" | "desc",
-    }
-    filter :string,
-    page: number
+interface fetchAlbumResponse {
+    status :number,
+    albums : album[]
 }
 
-const initialState :albumSliceState = {
-    albumList : [],
-    totalResults: 25,
-    sort:{
-        liked: false,
-        category: "",
-        order: "desc"
-    },
-    filter: "",
-    page: 1
+type initState = {
+    albums :album[]
+}
+
+const initialState :initState = {
+    albums: []
 };
 
-export const fetchAlbumPage = createAsyncThunk< album[], void, {dispatch : AppDispatch, state: RootState} >("albums/fetchAlbumPage", async(arg, thunkApi) => {
-    const state = thunkApi.getState();
+export const fetchAlbumPage = createAsyncThunk("albumList/fetchAlbumPage", async (arg=undefined, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
 
-    console.log(state);
-
-    let queryPart = `?page=${state.albums.page}&asc=`;
-    queryPart += state.albums.sort.order === "asc" ? 1 : 0;
-    queryPart += `&uid=${state.user.uid}&likes=${state.albums.sort.liked?1:0}`;
-    queryPart += state.albums.totalResults === undefined ? '' : `&limit=${state.albums.totalResults}`;
-    queryPart += state.albums.filter !== "" ? '' : `&search=${state.albums.filter}`;
-    queryPart += state.albums.sort.category !== "" ? '': `&sort=${state.albums.sort.category}`;
+    let queryPart = `?page=${state.search.page}&asc=`;
+    queryPart += state.search.order === "asc" ? 1 : 0;
+    queryPart += `&uid=${state.user.uid}&likes=${state.search.liked?1:0}`;
+    queryPart += state.search.totalResults === undefined ? '' : `&limit=${state.search.totalResults}`;
+    queryPart += state.search.filter == "" ? '' : `&search=${state.search.filter}`;
+    queryPart += `&sort=${state.search.category}`;
     queryPart += '&t='+Date.now();
 
-    return fetch( getAlbumURL + queryPart ).then(res => res.json());
+    return fetch( getAlbumURL + queryPart).then(res => res.json());
 });
 
 const albumsSlice = createSlice({
-    name: "albums",
+    name: "albumList",
     initialState,
-    reducers:{
-
-    },
+    reducers:{},
     extraReducers: builder => {
         builder
         .addCase(fetchAlbumPage.pending, () => {
-            console.log("googoo")
+            console.log("getting albums");
         } )
-        .addCase(fetchAlbumPage.fulfilled, ( state , action :PayloadAction<album[]> ) => {
-            state.albumList = action.payload;
-        })
-        .addCase(fetchAlbumPage.rejected, () => {
-
+        .addCase(fetchAlbumPage.fulfilled, ( state , action :PayloadAction<fetchAlbumResponse> ) => {
+            if(action.payload.status===200){
+                state.albums = action.payload.albums;
+            } else {
+                state.albums = [];
+            }
+            
         })
     }
 });
 
 
-export const selectAllAlbums = (state :RootState) => state.albums.albumList;
+export const selectAllAlbums = (state :RootState) => state.albumList.albums;
 
 export default albumsSlice.reducer;

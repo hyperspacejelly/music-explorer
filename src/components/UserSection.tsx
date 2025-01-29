@@ -1,90 +1,20 @@
 import { useState, useEffect } from "react";
-import { loginStatus, UserInfo } from "../typedefs";
 
-import { user_info, user_info_update } from "../API_ENDPOINT";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+
+import { selectUserInfo, updateUserInfo } from "../app/features/user/userSlice";
+
+import { toggleLikedFilter } from "../app/features/search/searchSlice";
 
 import './css/usersection.css';
 
-type UserSectionProps = {
-    loginStatus :loginStatus
-}
-
-async function getUserInfo(user :string, uid :string) :Promise<UserInfo>{
-    const payload = {
-        user: user,
-        uid: uid
-    }
-    
-    const loginRes = await fetch(user_info, {
-        method: 'POST',
-        mode:'cors',
-        cache: "no-cache",
-        headers:{
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    });
-
-    const data = await loginRes.json();
-
-    return data;
-}
-
-async function updateUserInfo(user :string, uid :string, newDisplayName :string, newsletterStatus :boolean) {
-    const payload = {
-        user: user,
-        uid: uid,
-        display_name: newDisplayName,
-        newsletter: newsletterStatus
-    }
-
-    const loginRes = await fetch(user_info_update, {
-        method: 'POST',
-        mode:'cors',
-        cache: "no-cache",
-        headers:{
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    });
-
-    const res = await loginRes.json();
-
-    return res;
-}
-
-function UserSection({loginStatus} :UserSectionProps){
-    const [newsletterStatus, setNewsletterStatus] = useState<boolean>();
-    const [displayName, setDisplayName]=useState(loginStatus.isGuest ? "Guest" : loginStatus.display_name);
+function UserSection(){
     const [editMode, setEditMode] = useState(false);
     const [displayNameEdit, setDisplayNameEdit] = useState("");
-    
-    useEffect(()=>{
-        if(!loginStatus.isGuest){
-            getUserInfo(loginStatus.email, loginStatus.uid)
-            .then((response)=>{
-                setNewsletterStatus(response.newsletter);
-                if(response.display_name!=displayName){
-                    setDisplayName(response.display_name);
-                }
-            });
-        }
-    },[]);
 
-    function handleUpdateUserInfo(newsletter :boolean, newDisplayName? :string){
-        updateUserInfo(loginStatus.email, loginStatus.uid, newDisplayName??displayName ,newsletter)
-        .then((res)=>{
-            if(res.status === 200){
-                getUserInfo(loginStatus.email, loginStatus.uid)
-                .then((response)=>{
-                    setNewsletterStatus(response.newsletter);
-                    if(response.display_name!=displayName){
-                        setDisplayName(response.display_name);
-                    }
-                });
-            }
-        })
-    }
+    const likeFilter = useAppSelector((state)=>state.search.liked);
+    const userInfo = useAppSelector( selectUserInfo );
+    const dispatch = useAppDispatch();
 
     function cancelEditMode(){
         setEditMode(false);
@@ -96,50 +26,57 @@ function UserSection({loginStatus} :UserSectionProps){
             <h3 className="mobile-hidden">Hello,&nbsp;</h3>
             <h3 className="mobile-displayed">Hi,&nbsp;</h3>
             { (!editMode) && <>
-                <h3>{displayName}</h3>
-                { !loginStatus.isGuest && <div className="user-name-button user-name-edit" onClick={()=>setEditMode(true)}></div>}
+                <h3>{userInfo.display_name}</h3>
+                { !userInfo.isGuest && <div className="user-name-button user-name-edit" onClick={()=>setEditMode(true)}></div>}
                 </>}
-            {(editMode && !loginStatus.isGuest) && <>
+            {(editMode && !userInfo.isGuest) && <>
                 <input id="display-name-input" 
-                    type="text" placeholder={displayName} 
+                    type="text" placeholder={userInfo.display_name} 
                     value={displayNameEdit} 
                     onChange={(e)=>setDisplayNameEdit(e.target.value)}
                     onKeyDown={(e)=>{
-                        if(typeof newsletterStatus === 'boolean' && e.key === "Enter"){
-                            handleUpdateUserInfo(newsletterStatus, displayNameEdit);
+                        if(e.key === "Enter"){
+                            dispatch( updateUserInfo({ display_name: displayNameEdit, newsletter: userInfo.newsletter }) );
                             cancelEditMode();
                         }
                     }}/>
                 <div className="user-name-button user-name-ok" 
                     onClick={()=>{
-                            if(typeof newsletterStatus === 'boolean'){
-                                handleUpdateUserInfo(newsletterStatus, displayNameEdit);
-                                cancelEditMode();
-                            }
+                            dispatch( updateUserInfo({ display_name: displayNameEdit, newsletter: userInfo.newsletter }) );
+                            cancelEditMode();
                         }}></div>
                 <div className="user-name-button user-name-cancel" onClick={()=>cancelEditMode()}></div>
                 </>}
         </div>
-        <div id="newsletter-select">
-            <h3>
-                {!loginStatus.isGuest && <>
+        <div>
+           
+            <h3 id="newsletter-select">
+                {!userInfo.isGuest && <>
                 <span className="mobile-hidden">Receive&nbsp;</span>newsletter?&nbsp; 
-                <span className={"user-opt-select "+ (newsletterStatus? "user-opt-selected":"none")}
+                <span className={"user-opt-select "+ (userInfo.newsletter? "user-opt-selected":"none")}
                     onClick={()=>{
-                        if(newsletterStatus)return;
-                        handleUpdateUserInfo(true);
+                        if(userInfo.newsletter)return;
+                            dispatch(updateUserInfo({display_name: userInfo.display_name, newsletter:true}));
                     }}>
                         Yes</span>
                 &nbsp;/&nbsp;
-                <span className={"user-opt-select "+ (newsletterStatus? "none":"user-opt-selected")}
+                <span className={"user-opt-select "+ (userInfo.newsletter? "none":"user-opt-selected")}
                      onClick={()=>{
-                        if(!newsletterStatus)return;
-                        handleUpdateUserInfo(false);
+                        if(!userInfo.newsletter)return;
+                            dispatch(updateUserInfo({display_name: userInfo.display_name, newsletter:false}));
                     }}>
                         No</span>
                 </>}
-                {loginStatus.isGuest && <>Newsletter unavailable in guest mode</>}
+                {userInfo.isGuest && <>Newsletter unavailable in guest mode</>}
             </h3>
+            {!userInfo.isGuest && <>
+                <h3 id="likes-tab" className={"user-section-tab user-like-toggle "+(likeFilter?"active":"")} 
+                    onClick={()=>{
+                        dispatch( toggleLikedFilter() );   
+                    }}>
+                    My Likes <span>💜</span>
+                </h3>
+            </>}
         </div>
     </div>);
 }

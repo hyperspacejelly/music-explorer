@@ -14,14 +14,15 @@ export interface album {
     tags :string,
     download :string,
     date_added :string,
-    liked :boolean | undefined
+    liked :boolean
 }
 
 export interface loginResponse {
     status: number,
     email: string,
     display_name: string,
-    uid :string
+    uid :string;
+    newsletter :boolean
 }
 
 export type FullAlbumInfo = discogsInfo & album;

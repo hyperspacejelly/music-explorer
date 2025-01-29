@@ -5,26 +5,28 @@ import { decodeHTML } from '../func/decodeHTML';
 import { setAlbumLike } from "../func/setAlbumLike";
 
 import './css/highlightModal.css';
+import { useAppSelector, useAppDispatch } from "../app/hooks";
+import { fetchDiscogsInfo, selectHighlightIsLiked, selectModalInfo, setModalClose, toggleAlbumIsLiked } from "../app/features/highlight/highlightSlice";
+import { selectGuestStatus } from "../app/features/user/userSlice";
 
-type HighlightModalProps = {
-    uid :string,
-    albumInfo :album,
-    open :boolean,
-    toggleModalOff :()=>void
-}
 
-function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalProps){
-    const [discogsInfos, setDiscogsInfo]=useState<discogsInfo>();
+function HighlightModal(){
+    // const [discogsInfos, setDiscogsInfo]=useState<discogsInfo>();
+    const dispatch = useAppDispatch();
     const tracklistRef = useRef<HTMLOListElement>(null);
-    const [isLiked, setIsLiked] = useState(albumInfo.liked);
+    const isLiked = useAppSelector(selectHighlightIsLiked);
 
-    useEffect(()=>{
-        setIsLiked(albumInfo.liked);
-    },[albumInfo]);
+    const isGuest = useAppSelector(selectGuestStatus);
+
+    const { album, modalOpen, discogsInfo } = useAppSelector(selectModalInfo);
+
+    // useEffect(()=>{
+    //     setIsLiked(albumInfo.liked);
+    // },[album]);
 
     const ytQuery = () => {
-        const albumNameSplit = albumInfo.album.replaceAll(/(&\S+;+)/g, " ").split(' ');
-        const artistNameSplit = albumInfo.artist.replaceAll(/(&\S+;+)/g, " ").split(' ');
+        const albumNameSplit = album.album.replaceAll(/(&\S+;+)/g, " ").split(' ');
+        const artistNameSplit = album.artist.replaceAll(/(&\S+;+)/g, " ").split(' ');
 
         let query="";
 
@@ -36,11 +38,12 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
             query += `+${elem}`;
         });
 
-        query+=`+${albumInfo.year}`;
+        query+=`+${album.year}`;
 
         return query;
     };
     
+    /*
     useEffect(()=>{
         if(open && uid!==""){
             const discogSearch = decodeHTML(albumInfo.album)+" "+decodeHTML(albumInfo.artist);
@@ -59,90 +62,99 @@ function HighlightModal({uid, albumInfo, open, toggleModalOff} :HighlightModalPr
             setDiscogsInfo(undefined);
         }
     },[open]);
+    */
 
-    function handleLike(){
-        const action = isLiked ? "unlike" : "like";
-        setAlbumLike(albumInfo.id, uid, action).then((res)=>{
-            if(res.status === 200){
-                setIsLiked(prev=>!prev);
-            }
-        });
-    }
+    useEffect(()=>{
+        if(album && !isGuest){
+            const discogSearch = decodeHTML(album.album)+" "+decodeHTML(album.artist);
+            dispatch( fetchDiscogsInfo(discogSearch) );  
+        }
+    }, [album.id]);
+
+    // function handleLike(){
+    //     const action = isLiked ? "unlike" : "like";
+    //     setAlbumLike(albumInfo.id, uid, action).then((res)=>{
+    //         if(res.status === 200){
+    //             setIsLiked(prev=>!prev);
+    //         }
+    //     });
+    // }
 
     function renderTracklist(){
-        if(typeof discogsInfos === "undefined"){return <></>}
+        if(discogsInfo.status === 0){return <p>Fetching tracklist...</p>}
 
-        if(discogsInfos.tracklist.length === 0){return<p>Couldn't fetch tracklist</p>}
+        if(discogsInfo.tracklist.length === 0){return<p>Couldn't fetch tracklist</p>}
 
-        const tracklist = discogsInfos.tracklist.map((track, index)=>{
-            return <li key={albumInfo.album+"_"+index}>{decodeHTML(track)}</li>;
+        const tracklist = discogsInfo.tracklist.map((track, index)=>{
+            return <li key={album.album+"_"+index}>{decodeHTML(track)}</li>;
         });
 
         return tracklist;
     }
 
-    return(
-    <div id="highlight-cont" className={open ? "visible" : "hidden"} 
-        onClick={toggleModalOff}>
-        <div id="highlight-modal" onClick={(e)=>{e.stopPropagation()}}>
-            <figure className="hl-image">
-                <img src={albumInfo.img_src} alt={albumInfo.album+" by "+albumInfo.artist}/>
-            </figure>
-            <div className="hl-text-section">
-                <div className="hl-album">
-                    <h2>{decodeHTML(albumInfo.album.replace("\\",""))+" "} 
-                        <span>({albumInfo.year})</span>
-                    </h2> 
-                    {(uid !== "") &&
-                    <div className={"hl-btn "+(isLiked?"hl-liked":"hl-like-default")} onClick={handleLike}></div>}
+    return(<>
+        <div id="highlight-cont" className={modalOpen ? "visible" : "hidden"} 
+            onClick={()=>dispatch( setModalClose() )}>
+                {album && <>
+                <div id="highlight-modal" onClick={(e)=>{e.stopPropagation()}}>
+                    <figure className="hl-image">
+                        <img src={album.img_src} alt={album.album+" by "+album.artist}/>
+                    </figure>
+                    <div className="hl-text-section">
+                        <div className="hl-album">
+                            <h2>{decodeHTML(album.album.replace("\\",""))+" "} 
+                                <span>({album.year})</span>
+                            </h2> 
+                            {(!isGuest) &&
+                            <div className={"hl-btn "+(isLiked?"hl-liked":"hl-like-default")} onClick={ ()=>dispatch(toggleAlbumIsLiked(album.id)) }></div>}
+                        </div>
+                        <h3 className="hl-artist">{decodeHTML(album.artist.replace("\\",""))}</h3>
+                        <section className="hl-link-cont">
+                            <a className="hl-link hl-youtube" 
+                                href={"https://www.youtube.com/results?search_query="+ytQuery()} 
+                                target="_blank">Find on YouTube</a>
+                            <div className="hl-separator"></div>
+                            { !isGuest &&
+                                <a className="hl-link hl-download" href={album.download} target="_blank">Download</a>
+                            }
+                            { isGuest &&
+                                <p className="hl-link hl-download disabled">Download</p>
+                            }
+                        </section>
+                        <h3 className="hl-tracklist-title">
+                                Tracklist &nbsp; 
+                                {(discogsInfo && !isGuest) && <span>
+                                    (
+                                <a href={discogsInfo.url == "" ? `https://www.discogs.com/search?q=${album.artist}&type=artist` : discogsInfo.url } 
+                                    target="_blank">
+                                        Discogs {discogsInfo.url !== "" ? "page" : "artist search results"}
+                                    </a>
+                                    )</span>
+                                }  
+                        </h3>
+                        <section className="hl-discogs-info">
+                            <ol ref={tracklistRef}>
+                                {(discogsInfo && !isGuest) &&
+                                    renderTracklist()
+                                }
+                                {(!discogsInfo && !isGuest) &&
+                                    <p>
+                                        Fetching Tracklist...
+                                    </p>
+                                }
+                                {(isGuest) &&
+                                    <p>
+                                        Tracklist unavailable in guest mode.
+                                    </p>
+                                }
+                            </ol>
+                        </section>
+                        <p className="hl-tags">{decodeHTML(album.tags)}</p>
+                    </div>
                 </div>
-                <h3 className="hl-artist">{decodeHTML(albumInfo.artist.replace("\\",""))}</h3>
-                <section className="hl-link-cont">
-                    <a className="hl-link hl-youtube" 
-                        href={"https://www.youtube.com/results?search_query="+ytQuery()} 
-                        target="_blank">Find on YouTube</a>
-                    <div className="hl-separator"></div>
-                    {uid!=="" &&
-                        <a className="hl-link hl-download" href={albumInfo.download} target="_blank">Download</a>
-                    }
-                    {uid=="" &&
-                        <a className="hl-link hl-download disabled" href="javascript:void(0)" >Download</a>
-                    }
-                </section>
-                <h3 className="hl-tracklist-title">
-                        Tracklist &nbsp; 
-                        {discogsInfos && <span>
-                            (
-                        <a href={discogsInfos.url ?? 
-                                `https://www.discogs.com/search?q=${albumInfo.artist}&type=artist` 
-                                } 
-                            target="_blank">
-                                Discogs {discogsInfos.url ? "page" : "artist search results"}
-                            </a>
-                            )</span>
-                        }  
-                </h3>
-                <section className="hl-discogs-info">
-                    <ol ref={tracklistRef}>
-                        {discogsInfos && 
-                            renderTracklist()
-                        }
-                        {(!discogsInfos && uid!=="") &&
-                            <p>
-                                Fetching Tracklist...
-                            </p>
-                        }
-                        {(!discogsInfos && uid=="") &&
-                            <p>
-                                Tracklist unavailable in guest mode.
-                            </p>
-                        }
-                     </ol>
-                </section>
-                <p className="hl-tags">{decodeHTML(albumInfo.tags)}</p>
-            </div>
+            </>}
         </div>
-    </div>);
+    </>);
 }
 
 export default HighlightModal;

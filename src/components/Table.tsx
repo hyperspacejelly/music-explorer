@@ -2,20 +2,25 @@ import { album } from '../typedefs';
 
 import { decodeHTML } from '../func/decodeHTML';
 
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { setHighlightAlbum, setModalOpen } from '../app/features/highlight/highlightSlice';
+
 import './css/table.css';
+import { selectGuestStatus } from '../app/features/user/userSlice';
+import { selectAllAlbums } from '../app/features/albums/albumsSlice';
 
-type AlbumTableProps ={
-    albumList: album[],
-    isGuest: boolean,
-    setSelectedAlbum: (albumInfo : album)=>void
-}
+function AlbumTable(){
+    const dispatch = useAppDispatch();
+    const albums = useAppSelector( selectAllAlbums );
+    const isGuest = useAppSelector( selectGuestStatus );
 
-function AlbumTable({albumList, setSelectedAlbum} :AlbumTableProps){
-
-    const albumRender = albumList.map((album)=>{
+    const albumRender = albums.map((album)=>{
         return(
             <div key={"album_"+album.id} className="album-display"
-                onClick={()=>setSelectedAlbum(album)}>
+                onClick={()=>{
+                    dispatch( setHighlightAlbum(album) );
+                    dispatch( setModalOpen() );
+                }}>
                 <span>{album.tags}</span>
                 <img src={album.img_src} alt={album.album} 
                     className={album.liked ? "album-like" : ""} />
@@ -27,7 +32,7 @@ function AlbumTable({albumList, setSelectedAlbum} :AlbumTableProps){
     });
 
     return(<section id="album-cont">
-        {albumRender}
+        {albums.length >=1 && albumRender}
     </section>);
 }
 

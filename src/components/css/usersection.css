@@ -6,6 +6,49 @@
     color: var(--font-dark);
 
     padding: 0px 4px 4px 4px;
+    
+}
+
+.user-section-tab{
+
+    border-radius: 1px;
+    cursor: pointer;
+    user-select: none;
+
+    background-color: var(--navbar-bg);
+
+    filter: brightness(95%);
+
+    border: 1px solid grey;
+    border-bottom: none;
+    padding: 1rem;
+    padding-top:0.5rem;
+    margin-top: -0.5rem;
+    margin-bottom: -5px;
+    margin-left: 3rem;
+    margin-right: -4px;
+}
+
+.user-section-tab:hover:not(.active){
+    filter: brightness(98%);
+}
+.user-section-tab:hover:not(.active) span{
+    filter: grayscale(50%);
+}
+
+.user-section-tab.active{
+    box-shadow: 4px -1px 4px -4px rgb(0, 0, 0, 0.5);
+
+    background-color: white;
+
+    filter: brightness(100%);
+    z-index: 3000;
+}
+.user-section-tab span{
+    filter: grayscale(100%);
+}
+.user-section-tab.active span{
+    filter: grayscale(0%);
 }
 
 #user-section > div {

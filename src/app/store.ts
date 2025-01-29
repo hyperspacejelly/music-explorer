@@ -3,12 +3,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import albumListReducer from './features/albums/albumsSlice';
 import userReducer from "./features/user/userSlice";
 import highlightReducer from "./features/highlight/highlightSlice";
+import searchReducer from "./features/search/searchSlice"
 
 export const store = configureStore({
     reducer:{
-        albums: albumListReducer,
+        albumList: albumListReducer,
         user: userReducer,
-        highlight: highlightReducer
+        highlight: highlightReducer,
+        search: searchReducer
     }
 });
 
