@@ -43,7 +43,12 @@ section#nav-sort-section {
     padding: 1px 0.5rem;
 }
 
-
+#navbar input::placeholder{
+    font-family: 'Kanit', sans-serif;
+    color:rgb(91, 91, 91);
+    font-weight: 200;
+    font-size: 1.8rem;
+}
 
 .nav-textInput {
     width: 100%;
@@ -162,7 +167,26 @@ input.nav-numInput[type=number] {
     height: 100%;
     margin: 0px 1rem;
 }
+.nav-sort-group{
+    height: 100%;
+    display: flex;
+}
+.nav-mobile-like-toggle{
+    height: 100%;
+    display: none;
+}
+.nav-mobile-like-toggle .nav-button{
+    cursor: pointer;
 
+    height: 80%;
+    -webkit-mask: url('/assets/heart.svg') no-repeat center / cover;
+    mask: url('/assets/heart.svg') no-repeat center / cover;
+}
+
+.nav-mobile-like-toggle.active{
+    -webkit-mask: url('/assets/heart-fill.svg') no-repeat center / cover;
+    mask: url('/assets/heart-fill.svg') no-repeat center / cover;
+}
 
 @media screen and (max-width: 900px) {
     #navbar {
@@ -319,5 +343,9 @@ input.nav-numInput[type=number] {
     .menu-close{
         -webkit-mask: url('/assets/x.svg') no-repeat center / cover;
         mask: url('/assets/x.svg') no-repeat center / cover;
+    }
+
+    .nav-mobile-like-toggle{
+        display: flex;
     }
 }

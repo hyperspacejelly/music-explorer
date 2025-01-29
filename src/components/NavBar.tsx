@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import './css/navbar.css';
 
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { nextPage, prevPage, changePage, setCategory, setFilter, setOrder, setTotalDisplayedResults, selectAllSearchParams, resetSearchParams } from '../app/features/search/searchSlice';
+import { nextPage, prevPage, changePage, setCategory, setFilter, setOrder, setTotalDisplayedResults, selectAllSearchParams, resetSearchParams, toggleLikedFilter } from '../app/features/search/searchSlice';
 
 import type { SortCategories, SortOrder } from '../app/features/search/searchSlice';
 
@@ -27,7 +27,7 @@ function NavBar() {
 
     useEffect(() => {
         resetScroll();
-        if(toggleMobile){setToggleMobile(false);}
+        //if(toggleMobile){setToggleMobile(false);}
     }, [searchParams]);
 
     useEffect(()=>{
@@ -47,6 +47,7 @@ function NavBar() {
         if (e.key !== "Enter") { return; }
         const newNum = pageNumInput === undefined ? searchParams.page : parseInt(pageNumInput);
         dispatch( changePage(newNum) ); 
+        setPageNumInput("");
     }
 
     function handleSortOrder(order :SortOrder){
@@ -57,6 +58,7 @@ function NavBar() {
     function handleReset() {
         dispatch(resetSearchParams());
         setSortInput("date_added");
+        setTotalResultSelect(25);
         setSearchInput("");
         setPageNumInput("");
     }
@@ -106,40 +108,52 @@ function NavBar() {
                     onClick={handleReset}></div>
             </section>
             <section id='nav-sort-section'>
-                <h2 className="nav-header">
-                    <span>Sort By&nbsp;</span>
-                </h2>
-                <select value={sortInput} 
-                        onChange={(e) => 
-                            {
-                                setSortInput(e.target.value as SortCategories);  
-                                dispatch(setCategory(e.target.value as SortCategories)); 
-                            }}>
-                    <option value="date_added">Date added</option>
-                    {/* { !isGuest &&<option value="likes">Liked albums 💜</option>} */}
-                    <option className='nav-asc' value="year">Release Year</option>
-                    <option className='nav-asc' value="album">Album Name</option>
-                    <option className='nav-asc' value="artist">Artist Name</option>
-
-                </select>
-                <div id="nav-sort-order">
-                    <span
-                        onClick={()=>handleSortOrder("desc")} 
-                        className={'sort-button descending '+ (searchParams.order==="desc"?"selected":"")}></span>
-                    <span 
-                        onClick={()=>handleSortOrder("asc")} 
-                        className={'sort-button ascending ' + (searchParams.order==="asc"?"selected":"")}></span>
+                <div className="nav-sort-group nav-mobile-like-toggle" >
+                    <h2 className="nav-header">
+                        My likes
+                    </h2>
+                    <div className={'nav-button '+(searchParams.liked ? "active" : "")}
+                        onClick={()=>{ dispatch(toggleLikedFilter()) }}
+                    ></div>
                 </div>
-                <select 
-                    value={totalResultSelect}
-                    onChange={(e)=>{
-                        dispatch( setTotalDisplayedResults(parseInt(e.target.value)) );
-                        setTotalResultSelect( parseInt(e.target.value) );
-                    }}>
-                    <option value={25}>25</option>
-                    <option value={50}>50</option>
-                    <option value={100}>100</option>
-                </select>
+                <div className="nav-sort-group">
+                    <h2 className="nav-header">
+                        <span>Sort By&nbsp;</span>
+                    </h2>
+                    <select value={searchParams.category} 
+                            onChange={(e) => 
+                                {
+                                    // setSortInput(e.target.value as SortCategories);  
+                                    dispatch(setCategory(e.target.value as SortCategories)); 
+                                }}>
+                        <option value="date_added">Date added</option>
+                        {/* { !isGuest &&<option value="likes">Liked albums 💜</option>} */}
+                        <option className='nav-asc' value="year">Release Year</option>
+                        <option className='nav-asc' value="album">Album Name</option>
+                        <option className='nav-asc' value="artist">Artist Name</option>
+
+                    </select>
+                    <div id="nav-sort-order">
+                        <span
+                            onClick={()=>handleSortOrder("desc")} 
+                            className={'sort-button descending '+ (searchParams.order==="desc"?"selected":"")}></span>
+                        <span 
+                            onClick={()=>handleSortOrder("asc")} 
+                            className={'sort-button ascending ' + (searchParams.order==="asc"?"selected":"")}></span>
+                    </div>
+                </div>
+                <div className="nav-sort-group">
+                    <select 
+                        value={searchParams.totalResults}
+                        onChange={(e)=>{
+                            dispatch( setTotalDisplayedResults(parseInt(e.target.value)) );
+                            // setTotalResultSelect( parseInt(e.target.value) );
+                        }}>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                    </select>
+                </div>
             </section>
         </nav>
     </>);
