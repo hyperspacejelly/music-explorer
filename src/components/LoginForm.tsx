@@ -1,4 +1,3 @@
-import { loginStatus } from "../typedefs";
 import { useState, useRef, useEffect } from "react";
 // import { checkLogin } from "../func/checkLogin";
 

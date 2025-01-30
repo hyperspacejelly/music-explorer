@@ -39,9 +39,6 @@ const albumsSlice = createSlice({
     reducers:{},
     extraReducers: builder => {
         builder
-        .addCase(fetchAlbumPage.pending, () => {
-            console.log("getting albums");
-        } )
         .addCase(fetchAlbumPage.fulfilled, ( state , action :PayloadAction<fetchAlbumResponse> ) => {
             if(action.payload.status===200){
                 state.albums = action.payload.albums;

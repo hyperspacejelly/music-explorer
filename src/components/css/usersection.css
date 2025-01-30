@@ -30,6 +30,7 @@
     margin-bottom: -5px;
     margin-left: 3rem;
     margin-right: -4px;
+
 }
 
 .user-section-tab:hover:not(.active){
@@ -39,13 +40,18 @@
     filter: grayscale(50%);
 }
 
+.user-section-tab.active:hover{
+    filter: brightness(98%);
+
+}
+
 .user-section-tab.active{
     box-shadow: 4px -1px 4px -4px rgb(0, 0, 0, 0.5);
     opacity: 1;
     background-color: white;
 
     filter: brightness(100%);
-    z-index: 3000;
+    z-index: 1000;
 }
 .user-section-tab span{
     filter: grayscale(100%);
@@ -100,6 +106,22 @@
 .mobile-displayed{
     display: none;
 }
+.user-like-toggle.mobile-hidden {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    height: 100%;
+}
+.heart-icon {
+    content: "";
+    height: 2rem;
+    aspect-ratio: 1 / 1;
+    display: block;
+    background-color: rgba(168, 164, 195, 1);
+    margin: 1px 0rem 0px 1rem;
+    -webkit-mask: url('/assets/heart-fill.svg') no-repeat center / cover;
+    mask: url('/assets/heart-fill.svg') no-repeat center / cover;
+}
 
 @media screen and (max-width: 900px) {
     #user-section{
@@ -121,12 +143,6 @@
     #user-section .mobile-displayed,
     .mobile-displayed{
         display: block;
-    }
-
-    .mobile-user-section{
-        /* width: 100%;
-        display: flex; */
-        /* justify-content: space-between; */
     }
 
     #newsletter-select{
@@ -152,5 +168,11 @@
         margin-bottom: -9px;
         margin-left: -4px;
         /* margin-right: -4px; */
+    }
+    #user-section .user-like-toggle.mobile-displayed {
+        display: flex;
+        width: fit-content;
+        align-items: center;
+        height: 100%;
     }
 }

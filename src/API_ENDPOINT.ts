@@ -1,6 +1,6 @@
 // the real one is private. C'mon.
 
-const baseURL = "http://127.0.0.1/musex-api";
+const baseURL = "http://localhost/musex-api";
 
 export const get_albums = baseURL+"/data/get_albums.php";
 export const get_page_count = baseURL+"/data/get_page_count.php";

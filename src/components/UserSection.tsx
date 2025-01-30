@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 
@@ -27,11 +27,12 @@ function UserSection(){
                     onClick={()=>{
                         dispatch( toggleLikedFilter() );   
                     }}>
-                    My Likes <span>💜</span>
+                    <span>My&nbsp;Likes</span>
+                    <span className="heart-icon"></span>
                 </h3>
             </>}
         <div className="mobile-user-section user-section-group">
-            <div id="user-section-display-name" className="user-section-group">
+            <div id="user-section-display-name" className="user-section-group mobile-hidden">
                 <h3 className="mobile-hidden">Hello,&nbsp;</h3>
                 <h3 className="mobile-displayed">Hi,&nbsp;</h3>
                 { (!editMode) && <>
@@ -83,7 +84,8 @@ function UserSection(){
                     onClick={()=>{
                         dispatch( toggleLikedFilter() );   
                     }}>
-                    My Likes <span>💜</span>
+                    <span>My&nbsp;Likes</span>
+                    <span className="heart-icon"></span>
                 </h3>
             </>}
 

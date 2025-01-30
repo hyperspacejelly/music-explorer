@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 //Import Components
 import AlbumTable from "./components/Table";
@@ -10,11 +10,9 @@ import UserSection from './components/UserSection';
 import { useAppSelector, useAppDispatch} from './app/hooks';
 import { selectUserInfo } from './app/features/user/userSlice';
 
-import { getPageCount, selectAllSearchParams } from './app/features/search/searchSlice';
+import { getPageCount, selectAllSearchParams, nextPage, prevPage } from './app/features/search/searchSlice';
 
 //Import Types
-import { album } from './typedefs';
-import { selectModalInfo } from './app/features/highlight/highlightSlice';
 import { fetchAlbumPage } from './app/features/albums/albumsSlice';
 
 function App() {
@@ -26,9 +24,24 @@ function App() {
 
   const dispatch = useAppDispatch();
 
-  const [pageNumber, setPageNumber] = useState(1);
-  const [currentAlbumList, setCurrentAlbumList] = useState<album[]>();
-  const currSelectedAlbum = useAppSelector(selectModalInfo);
+  useEffect(()=>{
+    // Global Keyboard Navigation
+    document.addEventListener("keydown", (e)=>{
+      e.stopImmediatePropagation();
+      let activeInput = document.activeElement?.tagName ?? "";
+      console.log(activeInput);
+      if( activeInput.toLowerCase() !== "input"){
+        switch(e.key){
+          case "ArrowRight" :
+              dispatch( nextPage() );
+            break;
+          case "ArrowLeft" :
+              dispatch( prevPage() );
+            break;
+        }
+      }
+    })
+  }, []);
 
   // Prevents background scrolling when modal open
   useEffect(()=>{
@@ -44,42 +57,17 @@ function App() {
 
   // Gets page count whenever a parameter affecting it changes
   useEffect(()=>{
-    dispatch( getPageCount() );
-  },[searchParams.filter, searchParams.category, searchParams.liked, searchParams.totalResults]);
-
-  // init fetch
-  useEffect(()=>{
-    dispatch( fetchAlbumPage() );
-  }, []);
+    if(loginStatus.isLoggedIn){
+      dispatch( getPageCount() );
+    }
+  },[searchParams.filter, searchParams.category, searchParams.liked, searchParams.totalResults, loginStatus.isLoggedIn]);
 
   // get album list when change in search params 
   useEffect(()=>{
-    dispatch( fetchAlbumPage() );
-  }, [searchParams]);
-
-  function setPageNumberWrapper(num :number){
-    
-    if(num === 0){
-      return;
+    if(loginStatus.isLoggedIn){
+      dispatch( fetchAlbumPage() );
     }
-
-    if(num < pageNumber){
-      setPageNumber(num);
-      return;
-    }
-
-    if(typeof currentAlbumList === "undefined") return;
-
-    if(num > pageNumber && currentAlbumList.length < 25){
-      return;
-    }
-
-    setPageNumber(num);
-  }
-
-  function setNewAlbumList(list :album[] | undefined){
-    setCurrentAlbumList(list);
-  }
+  }, [searchParams,  loginStatus.isLoggedIn]);
 
   return (
     <>
@@ -87,8 +75,7 @@ function App() {
       {loginStatus.isLoggedIn &&<>
         <UserSection/>
         <NavBar/>
-        {currSelectedAlbum && 
-          <HighlightModal/>}
+        <HighlightModal/>
         <AlbumTable />
       </>}
     </>

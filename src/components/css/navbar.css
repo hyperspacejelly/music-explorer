@@ -90,10 +90,22 @@ input.nav-numInput[type=number] {
     font-size: 2rem;
 }
 
-.nav-pagenum input {
+#nav-pagenum{
+    position: relative;
+}
+
+#nav-pagenum input {
     display: inline-block;
-    width: 5rem;
+    width: 8rem;
     margin-left: 0.5rem;
+}
+
+#nav-pagenum label{
+    height: 100%;
+    width: fit-content;
+    opacity: 0.5;
+    position: absolute;
+    right: 7px;
 }
 
 .nav-filter {
@@ -222,9 +234,11 @@ input.nav-numInput[type=number] {
     }
 
     #navbar section#nav-page-section {
+        grid-column-start: 1;
+        grid-column-end: 3;
         display: flex;
         font-size: 1.5rem;
-        border-right: none;
+        /* border-right: none; */
     }
 
     #navbar section#nav-filter-section,
@@ -235,6 +249,7 @@ input.nav-numInput[type=number] {
     }
 
     #navbar section#nav-filter-section{
+        display: none;
         padding: 1rem 0rem 1rem 0.5rem;
     }
 
@@ -254,15 +269,19 @@ input.nav-numInput[type=number] {
         text-overflow: ellipsis;
     }
 
-    .nav-pagenum input {
+    #nav-pagenum input {
         display: inline-block;
-        width: 5rem;
+        /* width: 5rem; */
+    }
+    #nav-pagenum label {
+        bottom: -1px;
+        font-size: 18px;
     }
     .nav-header{
         font-size: 1.7rem;
     }
 
-    .nav-pagenum {
+    #nav-pagenum {
         justify-content: center;
         margin: 0px 0.2rem;
        

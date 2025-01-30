@@ -18,12 +18,8 @@ function NavBar() {
     const dispatch = useAppDispatch();
 
     const [searchInput, setSearchInput] = useState("");
-    const [sortInput, setSortInput] = useState<SortCategories>("date_added");
     const [pageNumInput, setPageNumInput] = useState<string>();
-    const [totalResultSelect, setTotalResultSelect] = useState<number>(searchParams.totalResults);
     const [toggleMobile, setToggleMobile] = useState(false);
-
-    
 
     useEffect(() => {
         resetScroll();
@@ -57,8 +53,6 @@ function NavBar() {
 
     function handleReset() {
         dispatch(resetSearchParams());
-        setSortInput("date_added");
-        setTotalResultSelect(25);
         setSearchInput("");
         setPageNumInput("");
     }
@@ -70,13 +64,18 @@ function NavBar() {
                     setPageNumInput("");
                     dispatch( prevPage() );
                 }}></div>
-                <h2 className="nav-header nav-pagenum">Page
+                <h2 className="nav-header" style={{margin: "0px"}}>Page</h2>
+                <div id="nav-pagenum" className="nav-header">
                     <input className='nav-numInput' type='number'
                         placeholder={`${searchParams.page}`}
-                        value={pageNumInput} onChange={(e) => setPageNumInput(e.target.value)}
+                        value={pageNumInput} onChange={(e) => {
+                            let value = e.target.value;
+                            if(value.length > 3) return;
+                            setPageNumInput(value);
+                        }}
                         onKeyDown={handleEnterKeyPageNum}></input>
-                        &nbsp;/{ searchParams.pageCount ?? 0 }
-                </h2>
+                    <label>&nbsp;/{ searchParams.pageCount ?? 0 }</label> 
+                </div>
                 <div className='nav-button nav-next' onClick={() => {
                     setPageNumInput("");
                     dispatch( nextPage() );
@@ -84,8 +83,8 @@ function NavBar() {
 
             </section>
             <section id="nav-filter-section">
-                <h2 className='nav-header nav-filter'>
-                    <span>Filter: </span>
+                <h2 className='nav-header nav-filter '>
+                    <span >Filter: </span>
                     <span className='current-filter'>{searchParams.filter}</span></h2>
             </section>
             <section id="nav-mobile-toggle">
@@ -108,14 +107,14 @@ function NavBar() {
                     onClick={handleReset}></div>
             </section>
             <section id='nav-sort-section'>
-                <div className="nav-sort-group nav-mobile-like-toggle" >
+                {/* <div className="nav-sort-group nav-mobile-like-toggle" >
                     <h2 className="nav-header">
                         My likes
                     </h2>
                     <div className={'nav-button '+(searchParams.liked ? "active" : "")}
                         onClick={()=>{ dispatch(toggleLikedFilter()) }}
                     ></div>
-                </div>
+                </div> */}
                 <div className="nav-sort-group">
                     <h2 className="nav-header">
                         <span>Sort By&nbsp;</span>

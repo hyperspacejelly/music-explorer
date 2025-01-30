@@ -7,7 +7,7 @@ export type SortOrder = "asc" | "desc";
 
 export type SearchParams = {
     page: number,
-    pageCount :number | undefined,
+    pageCount :number,
     totalResults: number,
     liked: boolean,
     category :SortCategories,
@@ -30,7 +30,7 @@ const initialState :SearchParams = {
     filter: ""
 }
 
-export const getPageCount = createAsyncThunk("search/getPageCount", async(arg=undefined, thunkAPI)=>{
+export const getPageCount = createAsyncThunk("search/getPageCount", async(arg = undefined, thunkAPI)=>{
         const state = thunkAPI.getState() as RootState;
         let url = get_page_count + `?`;
         url += state.search.totalResults  === undefined ? '' : `limit=${state.search.totalResults}&`;
@@ -51,10 +51,17 @@ const searchSlice = createSlice({
             }
         },
         prevPage: (state) => {
-            state.page = state.page === 1 ? state.page : state.page--;
+            state.page = state.page === 1 ? state.page : (state.page - 1);
         },
         changePage: (state, action: PayloadAction<number>) =>{
-            state.page = action.payload;
+            if(action.payload > state.pageCount){
+                state.page = state.pageCount;
+            } else if(action.payload < 1) {
+                state.page = 1;
+            }
+            else{
+                state.page = action.payload;
+            }
         },
         toggleLikedFilter: (state) => {
             state.page = 1;

@@ -1,8 +1,5 @@
-import { album, discogsInfo } from "../typedefs";
-import { getTracklist } from "../func/discogs";
-import {useEffect, useState, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import { decodeHTML } from '../func/decodeHTML';
-import { setAlbumLike } from "../func/setAlbumLike";
 
 import './css/highlightModal.css';
 import { useAppSelector, useAppDispatch } from "../app/hooks";
@@ -11,7 +8,6 @@ import { selectGuestStatus } from "../app/features/user/userSlice";
 
 
 function HighlightModal(){
-    // const [discogsInfos, setDiscogsInfo]=useState<discogsInfo>();
     const dispatch = useAppDispatch();
     const tracklistRef = useRef<HTMLOListElement>(null);
     const isLiked = useAppSelector(selectHighlightIsLiked);
@@ -19,10 +15,6 @@ function HighlightModal(){
     const isGuest = useAppSelector(selectGuestStatus);
 
     const { album, modalOpen, discogsInfo } = useAppSelector(selectModalInfo);
-
-    // useEffect(()=>{
-    //     setIsLiked(albumInfo.liked);
-    // },[album]);
 
     const ytQuery = () => {
         const albumNameSplit = album.album.replaceAll(/(&\S+;+)/g, " ").split(' ');
@@ -43,42 +35,12 @@ function HighlightModal(){
         return query;
     };
     
-    /*
     useEffect(()=>{
-        if(open && uid!==""){
-            const discogSearch = decodeHTML(albumInfo.album)+" "+decodeHTML(albumInfo.artist);
-            getTracklist(discogSearch)
-            .then((info)=>{
-                if(info.status === 200){
-                    setDiscogsInfo(info);
-                } else{
-                    setDiscogsInfo({ ...info, tracklist : []});
-                }
-            });
-            if(tracklistRef.current !== null){
-                tracklistRef.current.scrollTop = 0;
-            }
-        }else{
-            setDiscogsInfo(undefined);
-        }
-    },[open]);
-    */
-
-    useEffect(()=>{
-        if(album && !isGuest){
+        if(album.album != "" && !isGuest){
             const discogSearch = decodeHTML(album.album)+" "+decodeHTML(album.artist);
             dispatch( fetchDiscogsInfo(discogSearch) );  
         }
     }, [album.id]);
-
-    // function handleLike(){
-    //     const action = isLiked ? "unlike" : "like";
-    //     setAlbumLike(albumInfo.id, uid, action).then((res)=>{
-    //         if(res.status === 200){
-    //             setIsLiked(prev=>!prev);
-    //         }
-    //     });
-    // }
 
     function renderTracklist(){
         if(discogsInfo.status === 0){return <p>Fetching tracklist...</p>}

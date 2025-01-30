@@ -1,18 +1,14 @@
-import { album } from '../typedefs';
-
 import { decodeHTML } from '../func/decodeHTML';
 
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setHighlightAlbum, setModalOpen } from '../app/features/highlight/highlightSlice';
 
 import './css/table.css';
-import { selectGuestStatus } from '../app/features/user/userSlice';
 import { selectAllAlbums } from '../app/features/albums/albumsSlice';
 
 function AlbumTable(){
     const dispatch = useAppDispatch();
     const albums = useAppSelector( selectAllAlbums );
-    const isGuest = useAppSelector( selectGuestStatus );
 
     const albumRender = albums.map((album)=>{
         return(
