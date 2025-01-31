@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-// import { checkLogin } from "../func/checkLogin";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { logAsGuest, checkLogin, selectStatus } from "../app/features/user/userSlice";

@@ -16,6 +16,7 @@ function HighlightModal(){
 
     const { album, modalOpen, discogsInfo } = useAppSelector(selectModalInfo);
 
+    // This function generates and returns a Youtube Search URL with the album's name, artist, and realease year 
     const ytQuery = () => {
         const albumNameSplit = album.album.replaceAll(/(&\S+;+)/g, " ").split(' ');
         const artistNameSplit = album.artist.replaceAll(/(&\S+;+)/g, " ").split(' ');
@@ -35,6 +36,7 @@ function HighlightModal(){
         return query;
     };
     
+    // If the highlight part of the store has an album stored and an user is Logged in, we dispatch the thunk getting the tracklist info
     useEffect(()=>{
         if(album.album != "" && !isGuest){
             const discogSearch = decodeHTML(album.album)+" "+decodeHTML(album.artist);
@@ -42,6 +44,7 @@ function HighlightModal(){
         }
     }, [album.id]);
 
+    // Returns the JSX for displaying the tracklist
     function renderTracklist(){
         if(discogsInfo.status === 0){return <p>Fetching tracklist...</p>}
 

@@ -15,11 +15,13 @@ function AlbumTable(){
     const dispatch = useAppDispatch();
     const albums = useAppSelector( selectAllAlbums );
 
-    useEffect(()=>{resetScroll();},[albums])
+    // Reset the inner scroll when a new slate of data is fetched
+    useEffect(()=>{ resetScroll(); }, [albums]);
 
-    const albumRender = albums.map((album)=>{
+    const albumRender = albums.map((album, key)=>{
         return(
             <div key={"album_"+album.id} className="album-display"
+                style={{animationDelay: key*40+"ms"}}
                 onClick={()=>{
                     dispatch( setHighlightAlbum(album) );
                     dispatch( setModalOpen() );

@@ -26,10 +26,11 @@ function App() {
 
   useEffect(()=>{
     // Global Keyboard Navigation
+    // Loads next or previous page with arrow keys
+    // Prevents keyboard navigation if a text input is focused
     document.addEventListener("keydown", (e)=>{
       e.stopImmediatePropagation();
       let activeInput = document.activeElement?.tagName ?? "";
-      console.log(activeInput);
       if( activeInput.toLowerCase() !== "input"){
         switch(e.key){
           case "ArrowRight" :

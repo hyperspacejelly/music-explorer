@@ -17,6 +17,7 @@ function NavBar() {
     const [pageNumInput, setPageNumInput] = useState<string>();
     const [toggleMobile, setToggleMobile] = useState(false);
 
+    // When switching back and forth between the like and normal set of albums we reset the search bar input
     useEffect(()=>{
         setSearchInput("");
     }, [searchParams.liked])
@@ -43,7 +44,7 @@ function NavBar() {
     }
 
     function handleReset() {
-        dispatch(resetSearchParams());
+        dispatch( resetSearchParams() );
         setSearchInput("");
         setPageNumInput("");
     }

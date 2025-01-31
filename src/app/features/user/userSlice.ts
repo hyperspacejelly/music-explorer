@@ -45,7 +45,7 @@ type UserInfoUpdate = {
 }
 
 /*
-    This async Thunk sends the inputed password and email and sends back whether the user exists and if the passwords match in th DB
+    This async Thunk sends the inputted password and email and sends back whether the user exists and if the passwords match in th DB
     If the match if made, we get back extra info like the user's UID and whether they sub to the newsletter
     We can then consider the user Logged In.
 
@@ -73,6 +73,13 @@ export const checkLogin = createAsyncThunk("user/checkLogin", async ( payload :c
     }).then( res => res.json() );
 
 });
+
+/*
+    This async Thunk sends a payload containing a display_name :string and a newsletter :boolean alongside the user's email and UID to the API
+    These will overwrite update the current display_name and newsletter bool for the user in the database.
+
+    The API sends back the updated display_name and newsletter bool is the request is sucessful
+*/
 
 export const updateUserInfo = createAsyncThunk("user/updateUserInfo", async (update :UserInfoUpdate, thunkAPI) => {
     const state = thunkAPI.getState() as RootState;
@@ -142,6 +149,7 @@ const userSlice = createSlice(
                 state.status = 503;
             })
             .addCase(updateUserInfo.fulfilled, (state, action :PayloadAction<UserInfoUpdateRes>) =>{
+            // We only update the display_name and newsletter properties if the ones sent back by the API are different than the ones currently stored
                 if(action.payload.status === 200){
                     if(state.display_name != action.payload.display_name){
                         state.display_name = action.payload.display_name;
