@@ -6,13 +6,15 @@ import { loginResponse } from "../../../typedefs";
 import { login_check } from "../../../API_ENDPOINT";
 import { user_info_update } from "../../../API_ENDPOINT";
 
+
+
 type userState = {
     isLoggedIn :boolean,
     isGuest: boolean,
     email :string,
     display_name: string,
     uid :string,
-    status :number | undefined,
+    status :number,
     newsletter: boolean
 }
 
@@ -23,7 +25,7 @@ const initialState :userState = {
     display_name: "Guest",
     uid: "",
     newsletter: false,
-    status: undefined
+    status: 0
 }
 
 type checkLoginPayload = {
@@ -41,6 +43,16 @@ type UserInfoUpdate = {
     display_name: string,
     newsletter: boolean
 }
+
+/*
+    This async Thunk sends the inputed password and email and sends back whether the user exists and if the passwords match in th DB
+    If the match if made, we get back extra info like the user's UID and whether they sub to the newsletter
+    We can then consider the user Logged In.
+
+    If there is no match, the status :number in the response gives us information on whether the email or pwd is incorrect
+    there is probably a better way and more standard way of doing this. Maybe an error property otherwise empty ?
+    🧐 Much to think about
+*/
 
 export const checkLogin = createAsyncThunk("user/checkLogin", async ( payload :checkLoginPayload ) => {
     const { pwd, email } = payload;

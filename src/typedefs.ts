@@ -25,17 +25,10 @@ export interface loginResponse {
     newsletter :boolean
 }
 
-export type FullAlbumInfo = discogsInfo & album;
-
 export type loginStatus = {
     isLoggedIn :boolean,
     isGuest: boolean,
     email :string,
     display_name: string,
     uid :string
-}
-
-export type UserInfo = {
-    display_name: string,
-    newsletter :boolean
 }

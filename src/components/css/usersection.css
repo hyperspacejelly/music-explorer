@@ -39,6 +39,9 @@
 .user-section-tab:hover:not(.active) span{
     filter: grayscale(50%);
 }
+.user-section-tab.active:hover span{
+    filter: grayscale(50%);
+}
 
 .user-section-tab.active:hover{
     filter: brightness(98%);

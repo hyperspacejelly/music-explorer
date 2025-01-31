@@ -3,14 +3,10 @@ import { useState, useEffect } from 'react';
 import './css/navbar.css';
 
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { nextPage, prevPage, changePage, setCategory, setFilter, setOrder, setTotalDisplayedResults, selectAllSearchParams, resetSearchParams, toggleLikedFilter } from '../app/features/search/searchSlice';
+import { nextPage, prevPage, changePage, setCategory, setFilter, setOrder, setTotalDisplayedResults, selectAllSearchParams, resetSearchParams } from '../app/features/search/searchSlice';
 
 import type { SortCategories, SortOrder } from '../app/features/search/searchSlice';
 
-
-function resetScroll() {
-    document.getElementsByTagName("main")[0].scrollTop = 0;
-}
 
 function NavBar() {
     // State pulled from the Redux Store
@@ -20,11 +16,6 @@ function NavBar() {
     const [searchInput, setSearchInput] = useState("");
     const [pageNumInput, setPageNumInput] = useState<string>();
     const [toggleMobile, setToggleMobile] = useState(false);
-
-    useEffect(() => {
-        resetScroll();
-        //if(toggleMobile){setToggleMobile(false);}
-    }, [searchParams]);
 
     useEffect(()=>{
         setSearchInput("");
@@ -132,14 +123,21 @@ function NavBar() {
                         <option className='nav-asc' value="artist">Artist Name</option>
 
                     </select>
-                    <div id="nav-sort-order">
+                    <select value={searchParams.order}
+                        onChange={(e)=>{
+                            handleSortOrder(e.target.value as SortOrder);
+                        }}>
+                            <option value="desc">Desc.</option>
+                            <option value="asc">Asc.</option>
+                    </select>
+                    {/* <div id="nav-sort-order">
                         <span
                             onClick={()=>handleSortOrder("desc")} 
                             className={'sort-button descending '+ (searchParams.order==="desc"?"selected":"")}></span>
                         <span 
                             onClick={()=>handleSortOrder("asc")} 
                             className={'sort-button ascending ' + (searchParams.order==="asc"?"selected":"")}></span>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="nav-sort-group">
                     <select 

@@ -182,6 +182,11 @@ input.nav-numInput[type=number] {
 .nav-sort-group{
     height: 100%;
     display: flex;
+    align-items: center;
+}
+.nav-sort-group select{
+    height: fit-content;
+    margin-right: 1rem;
 }
 .nav-mobile-like-toggle{
     height: 100%;
