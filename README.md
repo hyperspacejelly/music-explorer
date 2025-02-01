@@ -1,13 +1,13 @@
 # Music Explorer V1.5
 
 Ver 1.5 update:
-    - Added a "Guest" Mode that lets you browse the database without an account
-    - Added a page count to the nav bar
-    - New UI for accessing likes
-    - Ability to sort likes by artist, album, release year
-    - Ability to display up to 100 results at once
-    - Redux implementation
-
+- Added a "Guest" Mode that lets you browse the database without an account
+- Added a page count to the nav bar
+- New UI for accessing likes
+- Ability to sort likes by artist, album, release year
+- Ability to display up to 100 results at once
+- Redux implementation
+<hr>
 This repository is for the UI part of a personal project of mine. The project is made of 3 parts : 
 - A database of music albums (with title, release year, artist name, tags, link to album cover).
 - A custom PHP api that lets me search through it, sort it, login to an account and bookmark albums.
