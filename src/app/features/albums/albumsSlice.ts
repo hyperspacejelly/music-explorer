@@ -26,7 +26,7 @@ const initialState :initState = {
     The query URL is then built according to the current values stored in the state 
 
 */
-export const fetchAlbumPage = createAsyncThunk("albumList/fetchAlbumPage", async (arg=undefined, thunkAPI) => {
+export const fetchAlbumPage = createAsyncThunk("albumList/fetchAlbumPage", async (_, thunkAPI) => {
     // Arg is undefined and unused because I needed access to that 2nd argument (the thunkAPI) to get access to the entire state
 
     const state = thunkAPI.getState() as RootState; // Lets us access the entire redux store
