@@ -3,8 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import AppRouter from './AppRouter.tsx';
 
+import { store } from './app/store.ts';
+import { Provider } from 'react-redux';
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <AppRouter />
+    <Provider store={ store }>
+      <AppRouter />
+    </Provider>
   </React.StrictMode>,
 )

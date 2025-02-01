@@ -6,9 +6,64 @@
     color: var(--font-dark);
 
     padding: 0px 4px 4px 4px;
+    
+}
+#newsletter-select{
+    margin-left: 3rem;
+}
+.user-section-tab{
+
+    border-radius: 1px;
+    cursor: pointer;
+    user-select: none;
+
+    background-color: var(--navbar-bg);
+
+    filter: brightness(90%);
+    opacity: 0.8;
+
+    border: 1px solid grey;
+    border-bottom: none;
+    padding: 1rem;
+    padding-top:0.5rem;
+    margin-top: -0.5rem;
+    margin-bottom: -5px;
+    margin-left: 3rem;
+    margin-right: -4px;
+
 }
 
-#user-section > div {
+.user-section-tab:hover:not(.active){
+    filter: brightness(98%);
+}
+.user-section-tab:hover:not(.active) span{
+    filter: grayscale(50%);
+}
+.user-section-tab.active:hover span{
+    filter: grayscale(50%);
+}
+
+.user-section-tab.active:hover{
+    filter: brightness(98%);
+
+}
+
+.user-section-tab.active{
+    box-shadow: 4px -1px 4px -4px rgb(0, 0, 0, 0.5);
+    opacity: 1;
+    background-color: white;
+
+    filter: brightness(100%);
+    z-index: 1000;
+}
+.user-section-tab span{
+    filter: grayscale(100%);
+}
+.user-section-tab.active span{
+    filter: grayscale(0%);
+}
+
+.user-section-group{
     display: flex;
     align-items: center;
 }
@@ -54,8 +109,24 @@
 .mobile-displayed{
     display: none;
 }
+.user-like-toggle.mobile-hidden {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    height: 100%;
+}
+.heart-icon {
+    content: "";
+    height: 2rem;
+    aspect-ratio: 1 / 1;
+    display: block;
+    background-color: rgba(168, 164, 195, 1);
+    margin: 1px 0rem 0px 1rem;
+    -webkit-mask: url('/assets/heart-fill.svg') no-repeat center / cover;
+    mask: url('/assets/heart-fill.svg') no-repeat center / cover;
+}
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 900px) {
     #user-section{
         padding: 0px 4px 8px 4px;
     }
@@ -68,11 +139,17 @@
     #newsletter-select h3::first-letter{
         text-transform: uppercase;
     }
-    .mobile-hidden{
+    .mobile-hidden,
+    #user-section .mobile-hidden{
         display: none;
     }
+    #user-section .mobile-displayed,
     .mobile-displayed{
         display: block;
+    }
+
+    #newsletter-select{
+        text-transform: capitalize;
     }
 
     .user-name-ok{
@@ -83,5 +160,22 @@
 
     #display-name-input{
         width: 100%;
+    }
+
+    .user-section-tab {
+        border: 1px solid grey;
+        border-bottom: none;
+        padding: 1rem;
+        padding-top:0.5rem;
+        margin-top: -0.5rem;
+        margin-bottom: -9px;
+        margin-left: -4px;
+        /* margin-right: -4px; */
+    }
+    #user-section .user-like-toggle.mobile-displayed {
+        display: flex;
+        width: fit-content;
+        align-items: center;
+        height: 100%;
     }
 }

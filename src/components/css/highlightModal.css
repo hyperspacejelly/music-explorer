@@ -145,6 +145,7 @@
 }
 
 .hl-download.disabled{
+    cursor: pointer;
     text-decoration-style: solid;
     text-decoration-thickness: 2px;
     text-decoration-line: line-through;

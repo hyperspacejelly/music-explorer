@@ -1,4 +1,11 @@
-# Music Explorer V1.0
+# Music Explorer V1.5
+
+Ver 1.5 update:
+    - Added a page count to the nav bar
+    - New UI for accessing likes
+    - Ability to sort likes by artist, album, release year
+    - Ability to display up to 100 results at once
+    - Redux implementation
 
 This repository is for the UI part of a personal project of mine. The project is made of 3 parts : 
 - A database of music albums (with title, release year, artist name, tags, link to album cover).
@@ -29,7 +36,7 @@ Music Explorer functions just as well on mobile as it does on desktop!
 
 ## Dependencies and Credits
 
-- Music Explorer was built using Vite and uses "react-router-dom".
+- Music Explorer was built using Vite and uses "react-router-dom" and "redux-toolkit" / "react-redux".
 - All icons are from [Feather Icons](https://feathericons.com/).
 
 

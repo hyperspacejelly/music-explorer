@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 //Import Components
 import AlbumTable from "./components/Table";
@@ -7,21 +7,42 @@ import NavBar from './components/NavBar';
 import LoginForm from './components/LoginForm';
 import UserSection from './components/UserSection';
 
+import { useAppSelector, useAppDispatch} from './app/hooks';
+import { selectUserInfo } from './app/features/user/userSlice';
+
+import { getPageCount, selectAllSearchParams, nextPage, prevPage } from './app/features/search/searchSlice';
+
 //Import Types
-import { album, loginStatus } from './typedefs';
+import { fetchAlbumPage } from './app/features/albums/albumsSlice';
 
 function App() {
-  const [loginStatus, setLoginStatus] = useState<loginStatus>({
-    isLoggedIn: false,
-    isGuest: true,
-    email : "",
-    display_name: "",
-    uid : ""
-  });
-  const [pageNumber, setPageNumber] = useState(1);
-  const [currentAlbumList, setCurrentAlbumList] = useState<album[]>();
-  const [currSelectedAlbum, setCurrSelectedAlbum] = useState<album>();
-  const [highlightOpen, setHighlightOpen] = useState(false);
+
+  // State pulled from Redux Store
+  const loginStatus = useAppSelector( selectUserInfo );
+  const highlightOpen = useAppSelector((state) => state.highlight.modalOpen);
+  const searchParams = useAppSelector( selectAllSearchParams );
+
+  const dispatch = useAppDispatch();
+
+  useEffect(()=>{
+    // Global Keyboard Navigation
+    // Loads next or previous page with arrow keys
+    // Prevents keyboard navigation if a text input is focused
+    document.addEventListener("keydown", (e)=>{
+      e.stopImmediatePropagation();
+      let activeInput = document.activeElement?.tagName ?? "";
+      if( activeInput.toLowerCase() !== "input"){
+        switch(e.key){
+          case "ArrowRight" :
+              dispatch( nextPage() );
+            break;
+          case "ArrowLeft" :
+              dispatch( prevPage() );
+            break;
+        }
+      }
+    })
+  }, []);
 
   // Prevents background scrolling when modal open
   useEffect(()=>{
@@ -35,56 +56,28 @@ function App() {
     }
   },[highlightOpen]);
 
-  function setFullDisplayedAlbum(albumInfo : album){ 
-      setCurrSelectedAlbum(albumInfo);
-      setHighlightOpen(true);
-  }
-
-  function setPageNumberWrapper(num :number){
-    
-    if(num === 0){
-      return;
+  // Gets page count whenever a parameter affecting it changes
+  useEffect(()=>{
+    if(loginStatus.isLoggedIn){
+      dispatch( getPageCount() );
     }
+  },[searchParams.filter, searchParams.category, searchParams.liked, searchParams.totalResults, loginStatus.isLoggedIn]);
 
-    if(num < pageNumber){
-      setPageNumber(num);
-      return;
+  // get album list when change in search params 
+  useEffect(()=>{
+    if(loginStatus.isLoggedIn){
+      dispatch( fetchAlbumPage() );
     }
-
-    if(typeof currentAlbumList === "undefined") return;
-
-    if(num > pageNumber && currentAlbumList.length < 25){
-      return;
-    }
-
-    setPageNumber(num);
-  }
-
-  function updateLoginStatus(status :loginStatus){
-    setLoginStatus(status);
-  }
-
-  function setNewAlbumList(list :album[] | undefined){
-    setCurrentAlbumList(list);
-  }
+  }, [searchParams,  loginStatus.isLoggedIn]);
 
   return (
     <>
-      {!loginStatus.isLoggedIn && <LoginForm setLoginStatus={updateLoginStatus} />}
+      {!loginStatus.isLoggedIn && <LoginForm />}
       {loginStatus.isLoggedIn &&<>
-        <UserSection loginStatus={loginStatus} />
-
-        <NavBar uid={loginStatus.uid} pageNumber={pageNumber} selectPage={setPageNumberWrapper} 
-                 setNewAlbumList={setNewAlbumList}/>
-      
-        {currSelectedAlbum && 
-          <HighlightModal uid={loginStatus.uid} albumInfo={currSelectedAlbum} 
-                  open={highlightOpen} toggleModalOff={()=>{setHighlightOpen(false)}}/>}
-
-        {currentAlbumList && 
-          <AlbumTable albumList={currentAlbumList} 
-                  isGuest={loginStatus.isGuest}
-                  setSelectedAlbum={setFullDisplayedAlbum}/>}
+        <UserSection/>
+        <NavBar/>
+        <HighlightModal/>
+        <AlbumTable />
       </>}
     </>
   );
