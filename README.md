@@ -1,6 +1,7 @@
 # Music Explorer V1.5
 
 Ver 1.5 update:
+    - Added a "Guest" Mode that lets you browse the database without an account
     - Added a page count to the nav bar
     - New UI for accessing likes
     - Ability to sort likes by artist, album, release year
