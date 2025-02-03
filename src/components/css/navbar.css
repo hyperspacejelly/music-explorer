@@ -146,18 +146,6 @@ input.nav-numInput[type=number] {
     mask: url('/assets/x-octagon.svg') no-repeat center / cover;
 }
 
-.sort-button.ascending{
-    height: 80%;
-    -webkit-mask: url('/assets/arrow-up.svg') no-repeat center / cover;
-    mask: url('/assets/arrow-up.svg') no-repeat center / cover;
-}
-
-.sort-button.descending{
-    height: 80%;
-    -webkit-mask: url('/assets/arrow-down.svg') no-repeat center / cover;
-    mask: url('/assets/arrow-down.svg') no-repeat center / cover;
-}
-
 .nav-sort-cat{
     text-transform: capitalize;
     text-decoration: underline;
