@@ -5,18 +5,10 @@ import { setHighlightAlbum, setModalOpen } from '../app/features/highlight/highl
 
 import './css/table.css';
 import { selectAllAlbums } from '../app/features/albums/albumsSlice';
-import { useEffect } from 'react';
-
-function resetScroll() {
-    document.getElementsByTagName("main")[0].scrollTop = 0;
-}
 
 function AlbumTable(){
     const dispatch = useAppDispatch();
     const albums = useAppSelector( selectAllAlbums );
-
-    // Reset the inner scroll when a new slate of data is fetched
-    useEffect(()=>{ resetScroll(); }, [albums]);
 
     const albumRender = albums.map((album, key)=>{
         return(

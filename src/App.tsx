@@ -15,6 +15,14 @@ import { getPageCount, selectAllSearchParams, nextPage, prevPage } from './app/f
 //Import Types
 import { fetchAlbumPage } from './app/features/albums/albumsSlice';
 
+function resetScroll() {
+  let mainElement = document.querySelector<HTMLElement>("main");
+
+  if( mainElement === null) return ;
+
+  mainElement.scrollTop = 0;
+}
+
 function App() {
 
   // State pulled from Redux Store
@@ -67,6 +75,7 @@ function App() {
   useEffect(()=>{
     if(loginStatus.isLoggedIn){
       dispatch( fetchAlbumPage() );
+      resetScroll(); // Reset scroll when fetching a new page of albums
     }
   }, [searchParams,  loginStatus.isLoggedIn]);
 
