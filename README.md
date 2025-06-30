@@ -7,7 +7,8 @@ Ver 1.5 update:
 - Ability to sort likes by artist, album, release year
 - Ability to display up to 100 results at once
 - Redux implementation
-<hr>
+<hr />
+
 This repository is for the UI part of a personal project of mine. The project is made of 3 parts : 
 - A database of music albums (with title, release year, artist name, tags, link to album cover).
 - A custom PHP api that lets me search through it, sort it, login to an account and bookmark albums.
